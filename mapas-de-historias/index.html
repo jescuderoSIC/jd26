@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mapas de historias</title>
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <!-- Marco del jardín (opcional): paleta, barra y hoja -->
+    <link rel="stylesheet" href="../css/comun.css">
+    <link rel="stylesheet" href="../css/markdown.css">
+    <!-- Mapa: autónomo, todo lo necesario está en esta carpeta -->
+    <link rel="stylesheet" href="css/mapa.css">
+</head>
+<body>
+    <div class="hoja">
+        <nav class="barra">
+            <a class="volver" href="../index.html">← jd26</a>
+            <h2>Mapas de historias</h2>
+        </nav>
+
+        <!-- ===== Bloque del mapa: copiar desde aquí para incluirlo en otra página =====
+             Los lugares salen de json/lugares.json (ruta relativa a js/mapa.js).
+             Para usar otro fichero: <section id="mapa" data-json="ruta/a/otro.json"> -->
+        <div class="mapa-historias">
+            <section class="mapa" id="mapa" aria-label="Mapa de lugares">
+                <p class="aviso">Cargando mapa…</p>
+            </section>
+
+            <div class="controles">
+                <button type="button" id="encuadrar">Ver todos los lugares</button>
+                <span class="pista">Rueda o pellizco para acercar; arrastra para moverte.</span>
+            </div>
+
+            <article class="ficha" id="ficha" aria-live="polite" hidden>
+                <h3 id="ficha-nombre"></h3>
+                <p class="ficha-pais" id="ficha-pais"></p>
+                <p id="ficha-historia"></p>
+            </article>
+
+            <ul class="lugares" id="lugares"></ul>
+        </div>
+        <!-- ===== Fin del bloque del mapa ===== -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="js/mapa.js"></script>
+</body>
+</html>

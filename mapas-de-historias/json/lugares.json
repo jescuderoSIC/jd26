@@ -1,0 +1,47 @@
+{
+    "titulo": "Mapas de historias",
+    "lugares": [
+        {
+            "id": "londres",
+            "nombre": "Londres",
+            "pais": "Reino Unido",
+            "lat": 51.5074,
+            "lon": -0.1278,
+            "historia": "Primera parada de la prueba."
+        },
+        {
+            "id": "tirana",
+            "nombre": "Tirana",
+            "pais": "Albania",
+            "lat": 41.3275,
+            "lon": 19.8187,
+            "historia": "Capital de Albania."
+        },
+        {
+            "id": "durres",
+            "nombre": "Durrës",
+            "pais": "Albania",
+            "lat": 41.3231,
+            "lon": 19.4414,
+            "historia": "Ciudad portuaria a orillas del Adriático.",
+            "etiqueta": "izquierda"
+        },
+        {
+            "id": "atenas",
+            "nombre": "Atenas",
+            "pais": "Grecia",
+            "lat": 37.9838,
+            "lon": 23.7275,
+            "historia": "Capital de Grecia.",
+            "etiqueta": "izquierda"
+        },
+        {
+            "id": "mykonos",
+            "nombre": "Mykonos",
+            "pais": "Grecia",
+            "lat": 37.4467,
+            "lon": 25.3289,
+            "historia": "Isla de las Cícladas."
+        }
+    ]
+}

@@ -1,0 +1,125 @@
+/* ===== Mapa de historias =====
+   Autónomo: usa la paleta del jardín si existe (comun.css) y, si no,
+   los colores por defecto que van tras la coma en cada var(). */
+
+.mapa-historias { color: var(--texto, #2A2C40); font-family: inherit; }
+.mapa-historias .aviso { color: var(--texto-suave, #5F6178); font-style: italic; }
+
+.mapa {
+    position: relative;
+    background: #DCE9E0;          /* mar: salvia muy clara */
+    border-bottom: 1px solid var(--uni-suave, #DDD8BC);
+}
+
+.mapa .aviso { margin: 0; padding: 24px 16px; }
+
+.mapa svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    touch-action: none;           /* el gesto de zoom no hace scroll */
+    cursor: grab;
+}
+
+.mapa svg:active { cursor: grabbing; }
+
+.pais {
+    fill: #FBF6E6;
+    stroke: var(--uni-suave, #DDD8BC);
+    stroke-width: 0.8;
+    vector-effect: non-scaling-stroke;
+}
+
+.pais.con-historia { fill: var(--arena, #F2CC8F); stroke: #D9B271; }
+
+/* Marcadores */
+.lugar { cursor: pointer; outline: none; }
+
+.lugar circle {
+    fill: var(--terracota, #E07A5F);
+    stroke: var(--uni-profundo, #22243A);
+    stroke-width: 1.5;
+    transition: fill 0.15s;
+}
+
+.lugar text {
+    font-size: 13px;
+    font-weight: bold;
+    fill: var(--uni-profundo, #22243A);
+    paint-order: stroke;
+    stroke: var(--papel, #FFFDF6);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.lugar:hover circle,
+.lugar:focus-visible circle,
+.lugar.activo circle { fill: var(--pizarra, #3D405B); stroke: var(--terracota, #E07A5F); }
+
+.lugar:focus-visible text { text-decoration: underline; }
+
+/* Controles bajo el mapa */
+.controles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--texto-suave, #5F6178);
+}
+
+.controles button {
+    padding: 6px 12px;
+    font: inherit;
+    background-color: var(--papel, #FFFDF6);
+    color: var(--texto, #2A2C40);
+    border: 1px solid var(--linea, #2E3047);
+    cursor: pointer;
+}
+
+.controles button:hover { background-color: var(--uni-claro, #F4F1DE); }
+
+/* Ficha del lugar seleccionado */
+.ficha {
+    margin: 0 16px 12px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--terracota, #E07A5F);
+    background-color: var(--uni-claro, #F4F1DE);
+}
+
+.ficha h3 { margin: 0; color: var(--uni-profundo, #22243A); }
+.ficha p { margin: 4px 0 0; }
+.ficha-pais { font-size: 13px; color: var(--texto-suave, #5F6178); }
+
+/* Listado de lugares */
+.lugares {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 16px;
+}
+
+.lugares button {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--linea-suave, #ECE7D0);
+    color: var(--texto, #2A2C40);
+    cursor: pointer;
+}
+
+.lugares button:hover,
+.lugares button[aria-pressed="true"] { background-color: #EEF4E8; }
+
+.lugares .pais-lista { font-size: 13px; color: var(--texto-suave, #5F6178); }
+
+@media (min-width: 720px) {
+    .controles { padding: 10px 32px; }
+    .ficha { margin: 0 32px 12px; }
+    .lugares button { padding: 10px 32px; }
+}
