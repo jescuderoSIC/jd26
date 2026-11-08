@@ -1,0 +1,176 @@
+/* ===== Páginas que muestran un fichero Markdown (requiere comun.css) ===== */
+
+/* ===== Móvil (por defecto) ===== */
+.hoja {
+    background-color: var(--papel);
+    min-height: 100vh;
+}
+
+.barra {
+    background: var(--degradado-cabecera);
+    border-bottom: 4px solid var(--terracota);
+    padding: 10px 16px;
+}
+
+
+.barra h2 {
+    margin: 0;
+    font-size: 25px;
+    line-height: 50px;
+    color: var(--uni-claro);
+}
+
+.volver {
+    font-size: 14px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.volver:hover { text-decoration: underline; }
+
+.volver:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+.aviso {
+    color: var(--texto-suave);
+    font-style: italic;
+}
+
+/* ===== Contenido generado desde el Markdown ===== */
+.documento {
+    padding: 8px 16px 32px;
+    overflow-wrap: break-word;
+}
+
+.documento h1,
+.documento h2,
+.documento h3,
+.documento h4 {
+    color: var(--uni-oscuro);
+    line-height: 1.25;
+    margin: 1.6em 0 0.5em;
+}
+
+.documento h1 {
+    font-size: 26px;
+    color: var(--uni-profundo);
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--uni);
+}
+
+.documento h2 {
+    font-size: 21px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--uni-suave);
+}
+
+.documento h3 { font-size: 18px; }
+.documento h4 { font-size: 16px; }
+
+.documento p,
+.documento ul,
+.documento ol,
+.documento table,
+.documento pre,
+.documento blockquote { margin: 0 0 1em; }
+
+.documento ul,
+.documento ol { padding-left: 1.4em; }
+
+.documento li + li { margin-top: 0.25em; }
+
+.documento a { color: var(--enlace); }
+.documento a:hover { color: var(--uni-oscuro); }
+
+.documento strong { color: var(--uni-profundo); }
+
+.documento blockquote {
+    padding: 8px 14px;
+    border-left: 4px solid var(--terracota);
+    background-color: var(--uni-claro);
+    color: var(--uni-profundo);
+}
+
+.documento blockquote > :last-child { margin-bottom: 0; }
+
+.documento code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.9em;
+    padding: 1px 5px;
+    background-color: var(--uni-claro);
+    border: 1px solid var(--uni-suave);
+    color: var(--uni-profundo);
+}
+
+.documento pre {
+    padding: 12px 14px;
+    overflow-x: auto;
+    background: var(--uni-profundo);
+    border-left: 4px solid var(--terracota);
+    line-height: 1.4;
+}
+
+.documento pre code {
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--crema);
+}
+
+/* Números de línea (plugin line-numbers de Prism) */
+.documento .line-numbers .line-numbers-rows {
+    border-right-color: var(--uni-oscuro);
+}
+
+.documento .line-numbers-rows > span::before {
+    color: var(--arena);
+}
+
+.documento table {
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+    font-size: 14px;
+}
+
+.documento th,
+.documento td {
+    padding: 6px 10px;
+    border: 1px solid var(--uni-suave);
+    text-align: left;
+}
+
+.documento th {
+    background: var(--degradado-activo);
+    color: #ffffff;
+}
+
+.documento tr:nth-child(even) td { background-color: var(--fondo); }
+
+.documento img { max-width: 100%; height: auto; }
+
+.documento hr {
+    border: none;
+    height: 2px;
+    margin: 2em 0;
+    background: linear-gradient(90deg, var(--terracota) 0%, var(--arena) 50%, var(--salvia) 100%);
+}
+
+/* ===== Pantallas grandes ===== */
+@media (min-width: 720px) {
+    body { padding: 32px 20px; }
+
+    .hoja {
+        max-width: 760px;
+        margin: 0 auto;
+        min-height: 0;
+        border: 1px solid var(--linea);
+        box-shadow: 0 10px 30px var(--sombra);
+    }
+
+    .barra { padding: 10px 32px; }
+    .documento { padding: 8px 32px 40px; }
+    .documento h1 { font-size: 30px; }
+}

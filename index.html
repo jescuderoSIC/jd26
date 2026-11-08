@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jd26</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="css/comun.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="jardin">
+        <header class="cabecera">
+            <h1><img src="images/favicon.svg" alt="" width="48" height="48"> jd26</h1>
+            <p>Jardín digital: notas, herramientas e ideas que van creciendo.</p>
+        </header>
+
+        <div class="herramientas">
+            <input class="buscador" type="search" id="buscador"
+                   placeholder="Buscar páginas o etiquetas" aria-label="Buscar páginas o etiquetas">
+            <div class="filtros" role="group" aria-label="Filtrar por madurez">
+                <button type="button" data-filtro="todas" aria-pressed="true">Todas</button>
+                <button type="button" data-filtro="semilla" aria-pressed="false">Semillas</button>
+                <button type="button" data-filtro="brote" aria-pressed="false">Brotes</button>
+                <button type="button" data-filtro="arbol" aria-pressed="false">Árboles</button>
+            </div>
+            <p class="recuento" id="recuento" aria-live="polite"></p>
+        </div>
+
+        <!--
+            ===== CÓMO AÑADIR UNA PÁGINA =====
+            1. Copia bienvenida.html con otro nombre (p. ej. mi-nota.html) y cambia el <h2>.
+            2. Crea markdown/mi-nota.md con el contenido.
+            3. Copia aquí un <li> completo y cambia:
+              - data-estado: semilla | brote | arbol (y el aria-label de .madurez a juego)
+              - data-etiquetas: palabras separadas por comas (se usan en la búsqueda)
+              - href, título, resumen, fecha y etiquetas visibles
+        -->
+        <ul class="paginas" id="paginas">
+            <li class="pagina" data-estado="semilla" data-etiquetas="inicio, jardín digital, plantilla">
+                <a href="bienvenida.html" target="_blank">
+                    <span class="madurez" role="img" aria-label="Semilla"></span>
+                    <h2>Bienvenida</h2>
+                    <p class="resumen">Primera semilla del jardín: cómo está organizado y cómo añadir páginas.</p>
+                    <p class="datos"><time datetime="2026-11-08">8 nov 2026</time> <span class="etiqueta">inicio</span></p>
+                </a>
+            </li>
+        </ul>
+
+        <div class="vacio" id="vacio" hidden>
+            <p id="vacio-texto">Ninguna página coincide con la búsqueda.</p>
+            <button type="button" id="limpiar">Ver todas las páginas</button>
+        </div>
+
+        <p class="leyenda">
+            <span data-estado="semilla"><span class="madurez"></span> Semilla: idea inicial</span>
+            <span data-estado="brote"><span class="madurez"></span> Brote: en desarrollo</span>
+            <span data-estado="arbol"><span class="madurez"></span> Árbol: completa</span>
+        </p>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

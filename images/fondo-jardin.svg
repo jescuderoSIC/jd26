@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Baldosa del fondo: ramitas, flores y semillas con la paleta del jardín.
+       Todo queda dentro de la baldosa para que se repita sin cortes. -->
+  <defs>
+    <path id="hoja" d="M0 0 C4 -5 11 -6 16 0 C11 6 4 5 0 0 Z"/>
+    <g id="flor">
+      <circle cx="0" cy="-6" r="4.5"/>
+      <circle cx="5.7" cy="-1.9" r="4.5"/>
+      <circle cx="3.5" cy="4.9" r="4.5"/>
+      <circle cx="-3.5" cy="4.9" r="4.5"/>
+      <circle cx="-5.7" cy="-1.9" r="4.5"/>
+    </g>
+  </defs>
+
+  <!-- Ramita grande -->
+  <g fill="#81B29A" fill-opacity=".38" stroke="#81B29A" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round">
+    <path d="M38 92 C36 72 40 56 48 40" fill="none"/>
+    <use href="#hoja" transform="translate(38 80) rotate(200)"/>
+    <use href="#hoja" transform="translate(39 68) rotate(-30)"/>
+    <use href="#hoja" transform="translate(42 56) rotate(210)"/>
+    <use href="#hoja" transform="translate(46 45) rotate(-50)"/>
+  </g>
+
+  <!-- Ramita pequeña -->
+  <g fill="#81B29A" fill-opacity=".32" stroke="#81B29A" stroke-opacity=".45" stroke-width="1.5" stroke-linecap="round">
+    <path d="M150 182 C152 168 150 156 144 146" fill="none"/>
+    <use href="#hoja" transform="translate(151 170) rotate(-20)"/>
+    <use href="#hoja" transform="translate(149 158) rotate(190)"/>
+  </g>
+
+  <!-- Brote de dos hojas -->
+  <g fill="#81B29A" fill-opacity=".35" stroke="#81B29A" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round">
+    <path d="M100 128 L100 114" fill="none"/>
+    <use href="#hoja" transform="translate(100 116) rotate(-35)"/>
+    <use href="#hoja" transform="translate(100 116) rotate(215)"/>
+  </g>
+
+  <!-- Flores -->
+  <g transform="translate(140 50)">
+    <use href="#flor" fill="#E07A5F" fill-opacity=".32"/>
+    <circle r="3" fill="#F2CC8F" fill-opacity=".8"/>
+  </g>
+  <g transform="translate(60 160) scale(.75)">
+    <use href="#flor" fill="#F2CC8F" fill-opacity=".55"/>
+    <circle r="3" fill="#E07A5F" fill-opacity=".5"/>
+  </g>
+  <g transform="translate(176 118) scale(.55)">
+    <use href="#flor" fill="#E07A5F" fill-opacity=".28"/>
+    <circle r="3" fill="#3D405B" fill-opacity=".3"/>
+  </g>
+
+  <!-- Semillas sueltas -->
+  <g fill="#3D405B" fill-opacity=".18">
+    <ellipse cx="96" cy="30" rx="2" ry="3" transform="rotate(30 96 30)"/>
+    <ellipse cx="18" cy="140" rx="2" ry="3" transform="rotate(-20 18 140)"/>
+    <ellipse cx="120" cy="88" rx="1.6" ry="2.4" transform="rotate(60 120 88)"/>
+    <ellipse cx="186" cy="12" rx="1.6" ry="2.4"/>
+  </g>
+  <g fill="#E07A5F" fill-opacity=".3">
+    <circle cx="80" cy="100" r="1.8"/>
+    <circle cx="16" cy="20" r="1.5"/>
+    <circle cx="118" cy="186" r="1.8"/>
+  </g>
+</svg>

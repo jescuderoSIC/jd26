@@ -1,0 +1,55 @@
+/* ===== Estilos compartidos por todas las páginas ===== */
+
+/* ===== Paleta del jardín (images/paletaColores.png) =====
+   crema #F4F1DE · terracota #E07A5F · pizarra #3D405B · salvia #81B29A · arena #F2CC8F
+   Se mantienen los nombres --uni-* para no tocar el resto de hojas de estilo. */
+:root {
+    --crema: #F4F1DE;
+    --terracota: #E07A5F;
+    --pizarra: #3D405B;
+    --salvia: #81B29A;
+    --arena: #F2CC8F;
+
+    --uni: var(--pizarra);       /* color principal */
+    --uni-oscuro: #2E3047;       /* sombra de la pizarra */
+    --uni-profundo: #22243A;     /* bordes y textos fuertes */
+    --uni-vivo: var(--terracota);/* acento */
+    --uni-suave: #DDD8BC;        /* bordes claros (crema tostada) */
+    --uni-claro: var(--crema);   /* fondos tenues */
+
+    --fondo: #FAF8EE;            /* fondo general de la app */
+    --barra: var(--uni-claro);   /* barras superior e inferior */
+    --papel: #FFFDF6;            /* paneles y listas */
+    --linea: var(--uni-oscuro);
+    --linea-suave: #ECE7D0;      /* separadores entre elementos */
+    --resalte: var(--uni-claro);
+    --rojo: var(--terracota);
+    --verde: var(--salvia);      /* marcador de madurez */
+    --texto: #2A2C40;
+    --texto-suave: #5F6178;
+    --enlace: #B4513A;           /* terracota oscurecida: legible sobre papel */
+    --sombra: rgba(61, 64, 91, 0.22);
+
+    --degradado-cabecera: linear-gradient(135deg, var(--uni-profundo) 0%, var(--pizarra) 55%, #4F6B6C 100%);
+    --degradado-activo: linear-gradient(180deg, #4A4E6E 0%, var(--pizarra) 55%, var(--uni-oscuro) 100%);
+    --degradado-fondo: linear-gradient(170deg, var(--crema) 0%, #E9EEDC 55%, #D7E6D9 100%);
+    --degradado-pie: linear-gradient(90deg, var(--crema) 0%, #F7E7C6 100%);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+/* Fondo de jardín: baldosa de ramitas y flores sobre un degradado de crema a salvia.
+   La ruta es relativa a esta hoja de estilos (css/ → images/). */
+body {
+    margin: 0;
+    background: url("../images/fondo-jardin.svg") 0 0 / 200px 200px repeat, var(--degradado-fondo) fixed;
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+[hidden] { display: none !important; }
