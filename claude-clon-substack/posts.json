@@ -1,0 +1,21 @@
+{
+  "blog": {
+    "nombre": "Claudio dime el nombre exacto",
+    "descripcion": "Pruebas de como crece el jardín digital",
+    "autor": "jescudero",
+    "color": "#b4513a"
+  },
+  "entradas": [
+    {
+      "id": "emw8e5wnh5wh0",
+      "slug": "lista-de-herramientas-de-lapiz-y-papel",
+      "titulo": "Lista de herramientas de lápiz y papel",
+      "subtitulo": "pensar con bolígrafo y libreta",
+      "portada": "",
+      "autor": "jescudero",
+      "fecha": "2026-11-08T23:32:10+01:00",
+      "actualizado": "2026-11-09T00:02:35+01:00",
+      "palabras": 868
+    }
+  ]
+}

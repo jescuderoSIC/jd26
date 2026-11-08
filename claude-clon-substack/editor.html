@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("jd26.tema");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+<title>Editor del blog</title>
+<meta name="description" content="Escribe entradas con un editor limpio y publícalas como páginas HTML en claude-clon-substack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+/* Paleta del jardín jd26: crema #F4F1DE · terracota #E07A5F · pizarra #3D405B · salvia #81B29A · arena #F2CC8F */
+:root{
+  --paper:#FFFDF6; --bg:#F4F1DE; --ink:#2A2C40; --muted:#64667A; --line:#E4DEC6;
+  --accent:#3D405B; --accent-ink:#FFFDF6; --tint:rgba(61,64,91,.09);
+  --ok:#3F7A5F; --ok-soft:rgba(129,178,154,.22); --warn:#9A5B12; --warn-soft:rgba(242,204,143,.38);
+  --blog:#B4513A; --blog-texto:var(--blog); --soft:color-mix(in srgb,var(--blog) 9%,transparent);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#22243A; --bg:#2A2D45; --ink:#F4F1DE; --muted:#B5B3A3; --line:#3A3D57;
+    --accent:#F2CC8F; --accent-ink:#22243A; --tint:rgba(242,204,143,.13);
+    --ok:#81B29A; --ok-soft:rgba(129,178,154,.16); --warn:#E8957E; --warn-soft:rgba(224,122,95,.16);
+    --blog-texto:color-mix(in srgb,var(--blog) 62%,#F4F1DE);
+    --soft:color-mix(in srgb,var(--blog) 14%,transparent); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+    --paper:#22243A; --bg:#2A2D45; --ink:#F4F1DE; --muted:#B5B3A3; --line:#3A3D57;
+    --accent:#F2CC8F; --accent-ink:#22243A; --tint:rgba(242,204,143,.13);
+    --ok:#81B29A; --ok-soft:rgba(129,178,154,.16); --warn:#E8957E; --warn-soft:rgba(224,122,95,.16);
+    --blog-texto:color-mix(in srgb,var(--blog) 62%,#F4F1DE);
+    --soft:color-mix(in srgb,var(--blog) 14%,transparent); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{min-height:100%}
+body{
+  margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;
+}
+[hidden]{display:none !important}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* barra superior */
+.chrome{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 16px;flex-wrap:wrap}
+.back{color:var(--muted);text-decoration:none;font-size:1.1rem;padding:2px 6px;border-radius:8px}
+.back:hover{color:var(--accent);background:var(--tint)}
+.blogname{color:var(--ink);font-weight:700;font-size:1.02rem;text-decoration:none;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw}
+.blogname:hover{color:var(--accent)}
+.estado{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap}
+.chip{font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--accent);white-space:nowrap}
+.chip.publicada{background:var(--ok-soft);color:var(--ok)}
+.chip.cambios{background:var(--warn-soft);color:var(--warn)}
+.sp{flex:1}
+.sbtn{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;cursor:pointer;font-size:.86rem;white-space:nowrap}
+.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+.sbtn.ok{border-color:transparent;background:var(--ok-soft);color:var(--ok)}
+.go{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;white-space:nowrap;
+  font-size:.88rem;font-weight:500;border:0;border-radius:999px;padding:7px 16px;background:var(--accent);color:var(--accent-ink);
+}
+.go:active{transform:scale(.98)}
+.go:disabled{opacity:.5;cursor:default}
+.ibtn{width:34px;height:34px;border-radius:8px;border:0;background:transparent;cursor:pointer;color:var(--muted);display:grid;place-items:center;flex:none}
+.ibtn:hover{background:var(--tint);color:var(--accent)}
+.ibtn[aria-pressed="true"]{background:var(--tint);color:var(--ink)}
+.ibtn svg{width:18px;height:18px}
+.ibtn .glyph{font-size:1rem;line-height:1}
+.tema[data-modo="dark"] .luna,.tema:not([data-modo="dark"]) .sol{display:none}
+
+/* barra de formato */
+.toolbar{max-width:740px;margin:0 auto;display:flex;align-items:center;gap:2px;padding:4px 16px 6px;overflow-x:auto;scrollbar-width:thin}
+.toolbar select{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:5px 8px;font-size:.86rem;margin-right:4px;cursor:pointer}
+.toolbar .sep{width:1px;height:20px;background:var(--line);margin:0 6px;flex:none}
+
+/* hoja */
+.page{max-width:740px;margin:0 auto;padding:28px 30px 160px}
+.cover{margin-bottom:18px}
+.cover .add{border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:.86rem}
+.cover .add:hover{border-color:var(--accent);color:var(--accent)}
+.cover figure{margin:0;position:relative}
+.cover img{width:100%;max-height:420px;object-fit:cover;border-radius:6px;display:block}
+.cover .over{position:absolute;top:10px;right:10px;display:flex;gap:6px}
+.cover .over button{border:0;border-radius:999px;padding:6px 12px;background:rgba(0,0,0,.66);color:#fff;cursor:pointer;font-size:.8rem}
+textarea.t-title,textarea.t-sub{
+  display:block;width:100%;border:0;background:transparent;resize:none;overflow:hidden;padding:0;
+  font-family:Literata,Georgia,serif;outline:none;
+}
+textarea.t-title{font-size:clamp(1.95rem,5.4vw,2.6rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
+textarea.t-sub{font-size:clamp(1.1rem,3vw,1.3rem);line-height:1.45;color:var(--muted);margin:0 0 22px}
+textarea::placeholder{color:color-mix(in srgb,var(--muted) 60%,transparent)}
+.byline{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:.88rem;color:var(--muted);margin-bottom:28px}
+.byline b{display:block;color:var(--ink);font-weight:500;font-size:.95rem}
+.byline button{border:0;background:none;padding:0;color:var(--accent);cursor:pointer;font-size:inherit}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--blog);color:var(--paper);display:grid;place-items:center;font-weight:700;flex:none}
+
+/* cuerpo (mismo aspecto que la entrada publicada) */
+.cuerpo{font-family:Literata,Georgia,serif;font-size:1.16rem;line-height:1.75;outline:none;min-height:40vh;overflow-wrap:break-word;caret-color:var(--blog-texto)}
+.cuerpo>:first-child{margin-top:0}
+.cuerpo p{margin:0 0 1.25em}
+.cuerpo h2{font-size:1.6rem;line-height:1.25;letter-spacing:-.01em;margin:1.8em 0 .55em}
+.cuerpo h3{font-size:1.32rem;line-height:1.3;margin:1.6em 0 .5em}
+.cuerpo h4{font-size:1.12rem;line-height:1.35;margin:1.5em 0 .5em}
+.cuerpo a{color:var(--blog-texto);text-underline-offset:3px;text-decoration-thickness:1px}
+.cuerpo blockquote{margin:1.6em 0;padding:2px 0 2px 22px;border-left:3px solid var(--blog-texto);font-style:italic}
+.cuerpo blockquote p:last-child{margin-bottom:0}
+.cuerpo ul,.cuerpo ol{margin:0 0 1.25em;padding-left:1.4em}
+.cuerpo li{margin:.35em 0}
+.cuerpo li p{margin:0}
+.cuerpo hr{border:0;height:auto;margin:2.4em 0;text-align:center;overflow:visible}
+.cuerpo hr::after{content:"* * *";color:var(--muted);letter-spacing:.5em;font-size:1rem}
+.cuerpo figure{margin:2em 0;position:relative}
+.cuerpo img{max-width:100%;height:auto;display:block;margin:0 auto;border-radius:4px;cursor:pointer}
+.cuerpo figcaption{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:.86rem;line-height:1.45;color:var(--muted);text-align:center;margin-top:10px;outline:none}
+.cuerpo figcaption.vacio::before{content:"Escribe un pie de foto (opcional)";opacity:.55;pointer-events:none}
+.cuerpo figure.sel img{outline:3px solid var(--blog);outline-offset:3px}
+.cuerpo figure.video{cursor:pointer}
+.cuerpo figure.video img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.cuerpo figure.video::after{
+  content:"";position:absolute;left:50%;top:50%;width:64px;height:44px;margin:-22px 0 0 -32px;border-radius:12px;pointer-events:none;
+  background:rgba(0,0,0,.72) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/26px no-repeat;
+}
+.cuerpo code{font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:.86em;background:var(--soft);padding:.12em .35em;border-radius:4px}
+.cuerpo pre{font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;background:var(--soft);padding:14px 16px;border-radius:8px;overflow:auto;font-size:.9rem;line-height:1.55;margin:0 0 1.4em;white-space:pre-wrap}
+.cuerpo pre code{background:none;padding:0;font-size:inherit}
+
+/* modo Markdown: el texto se escribe en un área de texto en lugar del editor visual */
+.toolbar .sp{flex:1;min-width:8px}
+#mdBtn{flex:none;font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:.8rem;padding:5px 11px}
+#mdBtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.modo-md .toolbar > :not(#mdBtn):not(.sp):not(.md-ayuda){display:none}
+.md-ayuda{display:none;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.modo-md .md-ayuda{display:inline}
+.modo-md #ed{display:none}
+.md{display:block;width:100%;min-height:50vh;resize:none;overflow:hidden;border:1px dashed var(--line);border-radius:10px;padding:16px 18px;
+  background:var(--soft);color:var(--ink);font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:.95rem;line-height:1.65;tab-size:4}
+.md:focus{outline:none;border-color:var(--accent)}
+.cuerpo.vacio>p:first-child::before{content:"Empieza a escribir…  (prueba ## para un título, > para una cita o - para una lista)";color:var(--muted);opacity:.6;pointer-events:none;position:absolute}
+
+/* diálogos */
+dialog{
+  border:1px solid var(--line);border-radius:18px;padding:0;background:var(--paper);color:var(--ink);
+  width:min(500px,calc(100vw - 32px));box-shadow:0 30px 80px -30px rgba(0,0,0,.5);
+}
+dialog::backdrop{background:rgba(10,10,20,.45)}
+dialog form,dialog .dbody{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+dialog h3{margin:0;font-size:1.1rem}
+dialog label{display:flex;flex-direction:column;gap:5px;font-size:.84rem;color:var(--muted)}
+dialog input:not([type="color"]),dialog textarea{
+  font-size:.92rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;resize:vertical;width:100%;
+}
+dialog input:focus,dialog textarea:focus{outline:none;border-color:var(--accent)}
+dialog input[type="color"]{width:56px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:2px;cursor:pointer}
+dialog .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+dialog .row .left{margin-right:auto}
+dialog .hint{margin:0;font-size:.84rem;color:var(--muted);line-height:1.5}
+dialog .hint b{color:var(--ink);font-weight:500}
+.slugrow{display:flex;align-items:center;gap:4px;font-family:ui-monospace,Consolas,monospace;font-size:.86rem;color:var(--muted)}
+.slugrow input{flex:1;min-width:0;font-family:inherit}
+
+/* panel de entradas */
+dialog.drawer{margin:0 0 0 auto;height:100%;max-height:100%;width:min(420px,100vw);border-radius:18px 0 0 18px;border-right:0}
+.dh{display:flex;align-items:center;gap:8px;padding:16px 20px 0}
+.dh h3{flex:1}
+.dacts{display:flex;gap:8px;flex-wrap:wrap}
+.entlist{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.entlist li{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 0}
+.entlist li.actual{border-color:var(--accent);background:var(--tint)}
+.entlist .open{flex:1;min-width:0;text-align:left;border:0;background:transparent;cursor:pointer;padding:8px 12px;display:flex;flex-direction:column;gap:4px}
+.entlist .open b{font-weight:500;font-family:Literata,Georgia,serif;font-size:.98rem;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.entlist .open small{font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center}
+.entlist .ibtn:hover{color:#C2553B}
+.entempty{color:var(--muted);font-size:.9rem;text-align:center;padding:24px 0}
+
+.toast{
+  position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:30;
+  background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:.9rem;max-width:min(92vw,560px);
+  display:flex;align-items:center;gap:12px;transition:opacity .2s,transform .2s;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{border:0;background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:0;white-space:nowrap}
+
+@media (max-width:640px){
+  .page{padding:20px 16px 140px}
+  .topbar{gap:6px;padding:8px 12px}
+  .estado .txt{display:none}
+  #prevBtn{display:none}
+  .cuerpo{font-size:1.08rem}
+}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <div class="topbar">
+    <a class="back" href="../index.html" title="Volver a jd26" aria-label="Volver a jd26">←</a>
+    <a class="blogname" href="index.html" id="blogName" title="Ver el blog">Mi blog</a>
+    <span class="estado"><span class="chip" id="chip">Borrador</span><span class="txt" id="estado"></span></span>
+    <span class="sp"></span>
+    <button class="sbtn" type="button" id="folderBtn" hidden>Conectar carpeta</button>
+    <button class="sbtn" type="button" id="entBtn">Entradas</button>
+    <button class="ibtn" type="button" id="ajBtn" title="Ajustes del blog" aria-label="Ajustes del blog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button class="ibtn tema" type="button" id="temaBtn" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro">
+      <svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <a class="ibtn" href="instrucciones.html" target="_blank" rel="noopener" title="Cómo funciona el blog" aria-label="Cómo funciona el blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg></a>
+    <button class="sbtn" type="button" id="prevBtn">Vista previa</button>
+    <button class="go" type="button" id="pubBtn">Publicar</button>
+  </div>
+  <div class="toolbar" id="toolbar" role="toolbar" aria-label="Formato del texto">
+    <select id="blockSel" aria-label="Estilo del párrafo">
+      <option value="p">Párrafo</option>
+      <option value="h2">Título grande</option>
+      <option value="h3">Título medio</option>
+      <option value="h4">Título pequeño</option>
+      <option value="pre">Bloque de código</option>
+    </select>
+    <button class="ibtn" type="button" data-cmd="bold" title="Negrita (Ctrl+B)" aria-label="Negrita"><span class="glyph" style="font-weight:700">B</span></button>
+    <button class="ibtn" type="button" data-cmd="italic" title="Cursiva (Ctrl+I)" aria-label="Cursiva"><span class="glyph" style="font-style:italic;font-family:Literata,Georgia,serif">I</span></button>
+    <button class="ibtn" type="button" data-cmd="strikeThrough" title="Tachado" aria-label="Tachado"><span class="glyph" style="text-decoration:line-through">S</span></button>
+    <button class="ibtn" type="button" data-cmd="code" title="Código" aria-label="Código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="link" title="Enlace (Ctrl+K)" aria-label="Enlace"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></button>
+    <span class="sep"></span>
+    <button class="ibtn" type="button" data-cmd="quote" title="Cita" aria-label="Cita"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 6C4.9 7.2 3 9.6 3 13v5h6v-6H5.8c.2-2 1.4-3.5 3-4.3zm10 0C14.9 7.2 13 9.6 13 13v5h6v-6h-3.2c.2-2 1.4-3.5 3-4.3z"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="ul" title="Lista" aria-label="Lista con viñetas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="ol" title="Lista numerada" aria-label="Lista numerada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h10M10 12h10M10 18h10M4 5h1.5v4M4 9h3M4 15.5c0-.8.7-1.5 1.5-1.5S7 14.7 7 15.5c0 1.5-3 2-3 3.5h3"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="hr" title="Separador" aria-label="Separador"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></button>
+    <span class="sep"></span>
+    <button class="ibtn" type="button" data-cmd="image" title="Imagen" aria-label="Imagen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="video" title="Vídeo de YouTube" aria-label="Vídeo de YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg></button>
+    <span class="sep"></span>
+    <button class="ibtn" type="button" data-cmd="undo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+    <button class="ibtn" type="button" data-cmd="redo" title="Rehacer (Ctrl+Y)" aria-label="Rehacer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
+    <span class="sp"></span>
+    <span class="md-ayuda">**negrita** · *cursiva* · ## título · - lista · &gt; cita · [enlace](url)</span>
+    <button class="sbtn" type="button" id="mdBtn" aria-pressed="false" title="Escribir en Markdown (Ctrl+M)">Markdown</button>
+  </div>
+</div>
+
+<main class="page">
+  <div class="cover" id="cover"></div>
+  <textarea id="tTitle" class="t-title" rows="1" placeholder="Título" aria-label="Título"></textarea>
+  <textarea id="tSub" class="t-sub" rows="1" placeholder="Añade un subtítulo…" aria-label="Subtítulo"></textarea>
+  <div class="byline" id="byline"></div>
+  <div id="ed" class="cuerpo" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Texto de la entrada"></div>
+  <textarea id="md" class="md" spellcheck="true" aria-label="Texto de la entrada en Markdown" placeholder="Escribe en Markdown: ## título, **negrita**, *cursiva*, - lista, > cita, [enlace](https://…)" hidden></textarea>
+</main>
+
+<!-- pedir un dato (enlace, imagen, vídeo, portada) -->
+<dialog id="ask">
+  <form method="dialog">
+    <h3 id="askT"></h3>
+    <label><span id="askL"></span><input id="askIn" autocomplete="off" spellcheck="false"></label>
+    <p class="hint" id="askH"></p>
+    <div class="row">
+      <button class="sbtn left" type="button" id="askFile">Elegir archivo…</button>
+      <button class="sbtn" value="del" id="askDel" formnovalidate>Quitar</button>
+      <button class="sbtn" value="cancel" formnovalidate>Cancelar</button>
+      <button class="go" value="ok">Aceptar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- publicar -->
+<dialog id="pub">
+  <form method="dialog">
+    <h3 id="pubT">Publicar entrada</h3>
+    <label>Dirección de la página<span class="slugrow"><span>posts/</span><input id="pSlug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" spellcheck="false"><span>.html</span></span></label>
+    <label>Fecha de publicación<input type="date" id="pDate" required></label>
+    <p class="hint" id="pWhere"></p>
+    <div class="row">
+      <button class="sbtn left" type="button" id="pConnect">Conectar carpeta</button>
+      <button class="sbtn" value="cancel" formnovalidate>Cancelar</button>
+      <button class="go" value="ok" id="pOk">Publicar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ajustes del blog -->
+<dialog id="aj">
+  <form method="dialog">
+    <h3>Ajustes del blog</h3>
+    <label>Nombre del blog<input id="aNombre" required></label>
+    <label>Descripción (sale en la portada del blog)<textarea id="aDesc" rows="2"></textarea></label>
+    <label>Autor (firma de las entradas)<input id="aAutor"></label>
+    <label>Color principal<input type="color" id="aColor"></label>
+    <p class="hint" id="aHint"></p>
+    <div class="row">
+      <button class="sbtn left" type="button" id="aRegen">Regenerar todas las páginas</button>
+      <button class="sbtn" value="cancel" formnovalidate>Cancelar</button>
+      <button class="go" value="ok">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- entradas -->
+<dialog id="ent" class="drawer">
+  <div class="dh"><h3>Entradas</h3><button class="ibtn" type="button" id="entClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <div class="dacts">
+      <button class="go" type="button" id="newBtn">+ Nueva entrada</button>
+      <button class="sbtn" type="button" id="importBtn">Abrir un .html publicado…</button>
+    </div>
+    <ul class="entlist" id="entList"></ul>
+  </div>
+</dialog>
+
+<input type="file" id="filePick" accept="image/*" hidden>
+<input type="file" id="htmlPick" accept=".html,text/html" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="toastBtn" hidden></button></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="plantillas.js"></script>
+<script>
+/* Botón de tema claro / oscuro (misma clave que las páginas del blog) */
+(function(){var b=document.getElementById("temaBtn");if(!b)return;var r=document.documentElement,mq=matchMedia("(prefers-color-scheme: dark)");
+function actual(){return r.getAttribute("data-theme")||(mq.matches?"dark":"light")}
+function pintar(){var m=actual(),t=m==="dark"?"Cambiar a modo claro":"Cambiar a modo oscuro";b.setAttribute("data-modo",m);b.setAttribute("aria-label",t);b.title=t}
+b.addEventListener("click",function(){var n=actual()==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("jd26.tema",n)}catch(e){}pintar()});
+mq.addEventListener("change",pintar);pintar()})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var P = window.Plantillas;
+  var LS_POSTS = 'claude-substack.entradas', LS_CUR = 'claude-substack.actual', LS_BLOG = 'claude-substack.blog';
+  var DIRNAME = 'claude-clon-substack';
+  // trae lo guardado con el nombre anterior de la carpeta (jei-clon-substack)
+  try {
+    [['jei-substack.entradas', LS_POSTS], ['jei-substack.actual', LS_CUR], ['jei-substack.blog', LS_BLOG]].forEach(function (k) {
+      var v = localStorage.getItem(k[0]);
+      if (v !== null && localStorage.getItem(k[1]) === null) localStorage.setItem(k[1], v);
+      if (v !== null) localStorage.removeItem(k[0]);
+    });
+  } catch (e) { /* sin almacenamiento */ }
+  var canFolder = 'showDirectoryPicker' in window;
+  var ed = $('ed'), tTitle = $('tTitle'), tSub = $('tSub');
+
+  var posts = {};            // id -> entrada (borradores y copias de lo publicado), en el navegador
+  try { posts = JSON.parse(localStorage.getItem(LS_POSTS)) || {}; } catch (e) { posts = {}; }
+  var blogData = normBlog(null);   // contenido de posts.json
+  try { blogData = normBlog(JSON.parse(localStorage.getItem(LS_BLOG))); } catch (e) { /* sin caché */ }
+  var cur = null, dir = null, pendingHandle = null;
+
+  // ---------- utilidades ----------
+  var toastTimer, toastAction = null;
+  function toast(msg, actionLabel, action, ms) {
+    $('toastText').textContent = msg;
+    var b = $('toastBtn');
+    b.hidden = !actionLabel; b.textContent = actionLabel || ''; toastAction = action || null;
+    $('toast').classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { $('toast').classList.remove('show'); }, ms || (action ? 6500 : 3200));
+  }
+  $('toastBtn').addEventListener('click', function () { if (toastAction) toastAction(); $('toast').classList.remove('show'); });
+  var esc = P.esc;
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function localIso(d) { d = d || new Date(); var o = -d.getTimezoneOffset(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) + (o >= 0 ? '+' : '-') + pad(Math.floor(Math.abs(o) / 60)) + ':' + pad(Math.abs(o) % 60); }
+  function uid() { return 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function ytId(u) {
+    try {
+      var x = new URL(u);
+      if (/(^|\.)youtu\.be$/.test(x.hostname)) return x.pathname.slice(1, 12);
+      if (!/(^|\.)youtube(-nocookie)?\.com$/.test(x.hostname)) return '';
+      var v = x.searchParams.get('v'); if (v) return v;
+      var m = x.pathname.match(/\/(?:shorts|embed|live|v)\/([\w-]{11})/); return m ? m[1] : '';
+    } catch (e) { return ''; }
+  }
+  function fetchText(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }); }
+  function normBlog(d) {
+    d = d && typeof d === 'object' ? d : {};
+    var b = d.blog || {};
+    return {
+      blog: { nombre: b.nombre || 'Mi blog', descripcion: b.descripcion || '', autor: b.autor || '', color: /^#[0-9a-f]{6}$/i.test(b.color || '') ? b.color : '#B4513A' },
+      entradas: Array.isArray(d.entradas) ? d.entradas.filter(function (e) { return e && e.slug && e.titulo; }) : []
+    };
+  }
+  function download(name, text, type) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: type || 'text/html' })); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+
+  // ---------- limpieza del HTML (pegar, guardar y publicar) ----------
+  var KEEP = { P: 1, H2: 1, H3: 1, H4: 1, STRONG: 1, EM: 1, S: 1, CODE: 1, PRE: 1, A: 1, BLOCKQUOTE: 1, UL: 1, OL: 1, LI: 1, HR: 1, BR: 1, IMG: 1, FIGURE: 1, FIGCAPTION: 1, SUB: 1, SUP: 1 };
+  var RENAME = { B: 'STRONG', I: 'EM', STRIKE: 'S', DEL: 'S', H1: 'H2', H5: 'H4', H6: 'H4', DIV: 'P', SECTION: 'P', ARTICLE: 'P', HEADER: 'P', FOOTER: 'P', MAIN: 'P' };
+  var DROP = /^(SCRIPT|STYLE|META|LINK|TITLE|HEAD|NOSCRIPT|TEMPLATE|SVG|BUTTON|INPUT|SELECT|TEXTAREA|OBJECT|EMBED|CANVAS|VIDEO|AUDIO|FORM)$/;
+  var NO_P_INSIDE = { P: 1, H2: 1, H3: 1, H4: 1, LI: 1, PRE: 1, FIGCAPTION: 1, A: 1, STRONG: 1, EM: 1, S: 1, CODE: 1, SUB: 1, SUP: 1 };
+  var BLOCKS = { P: 1, H2: 1, H3: 1, H4: 1, PRE: 1, BLOCKQUOTE: 1, UL: 1, OL: 1, HR: 1, FIGURE: 1 };
+
+  function safeUrl(u, img) {
+    u = String(u || '').trim();
+    if (!u) return '';
+    if (/^(https?:|mailto:)/i.test(u)) return u;
+    if (img && /^data:image\/(png|jpe?g|gif|webp|avif);/i.test(u)) return u;
+    if (/^[a-z][\w+.-]*:/i.test(u)) return '';      // otros esquemas (javascript:, etc.)
+    return u;                                        // relativa o #ancla
+  }
+  function ytFromSrc(s) { var m = String(s || '').match(/youtube(?:-nocookie)?\.com\/embed\/([\w-]{11})/); return m ? m[1] : ''; }
+  function videoFig(id) {
+    var f = document.createElement('figure'); f.className = 'video'; f.setAttribute('data-youtube', id);
+    var i = document.createElement('img'); i.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg'; i.alt = 'Vídeo de YouTube';
+    f.appendChild(i); return f;
+  }
+  function imageFig(src) {
+    var f = document.createElement('figure'), i = document.createElement('img'), c = document.createElement('figcaption');
+    i.setAttribute('src', src); i.alt = ''; c.innerHTML = '<br>'; c.className = 'vacio';
+    f.appendChild(i); f.appendChild(c); return f;
+  }
+  function clean(src) { var out = document.createDocumentFragment(); kids(src, out); return out; }
+  function kids(src, parent) { Array.prototype.slice.call(src.childNodes).forEach(function (n) { walk(n, parent); }); }
+  function walk(n, parent) {
+    if (n.nodeType === 3) { parent.appendChild(document.createTextNode(n.nodeValue)); return; }
+    if (n.nodeType !== 1) return;
+    var tag = n.tagName.toUpperCase();
+    if (DROP.test(tag)) return;
+    if (tag === 'IFRAME') { var id = ytFromSrc(n.getAttribute('src')); if (id) parent.appendChild(videoFig(id)); return; }
+    if (tag === 'FIGURE') {
+      var yid = n.getAttribute('data-youtube');
+      if (!/^[\w-]{11}$/.test(yid || '')) { var ifr = n.querySelector('iframe'); yid = ifr ? ytFromSrc(ifr.getAttribute('src')) : ''; }
+      if (yid) { parent.appendChild(videoFig(yid)); return; }
+    }
+    if (tag === 'SPAN' || tag === 'FONT' || (tag === 'B' && /font-weight:\s*(normal|400)/.test(n.getAttribute('style') || ''))) {
+      var st = n.style || {}, w = st.fontWeight, target = parent;
+      if (w === 'bold' || +w >= 600) { var s = document.createElement('strong'); target.appendChild(s); target = s; }
+      if (st.fontStyle === 'italic') { var em = document.createElement('em'); target.appendChild(em); target = em; }
+      kids(n, target); return;
+    }
+    tag = RENAME[tag] || tag;
+    if (tag === 'P' && parent.nodeType === 1 && NO_P_INSIDE[parent.tagName]) {
+      if (parent.lastChild && parent.lastChild.nodeName !== 'BR') parent.appendChild(document.createElement('br'));
+      kids(n, parent); return;
+    }
+    if (!KEEP[tag]) { kids(n, parent); return; }
+    var el = document.createElement(tag);
+    if (tag === 'A') { var h = safeUrl(n.getAttribute('href')); if (!h) { kids(n, parent); return; } el.setAttribute('href', h); }
+    if (tag === 'IMG') {
+      var src = safeUrl((n.getAttribute('src') || '').replace(/^\.\.\/imagenes\//, 'imagenes/'), true);
+      if (!src) return;
+      el.setAttribute('src', src); el.setAttribute('alt', n.getAttribute('alt') || '');
+      parent.appendChild(el); return;
+    }
+    parent.appendChild(el);
+    if (tag !== 'HR' && tag !== 'BR') kids(n, el);
+  }
+  // envuelve el texto suelto en <p> y saca figuras y separadores de dentro de los párrafos
+  function blocks(frag) {
+    var out = document.createDocumentFragment(), p = null;
+    Array.prototype.slice.call(frag.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && BLOCKS[n.tagName]) { p = null; out.appendChild(n); }
+      else if (n.nodeType === 1 && n.tagName === 'LI') {
+        if (p !== null || !out.lastChild || out.lastChild.nodeName !== 'UL') out.appendChild(document.createElement('ul'));
+        p = null; out.lastChild.appendChild(n);
+      } else if (n.nodeName === 'BR' && !p) { /* salto suelto entre bloques */ }
+      else {
+        if (n.nodeType === 3 && !n.nodeValue.trim() && !p) return;
+        if (!p) { p = document.createElement('p'); out.appendChild(p); }
+        p.appendChild(n);
+      }
+    });
+    Array.prototype.slice.call(out.querySelectorAll('figure, hr')).forEach(function (f) {
+      if (f.parentNode === out) return;
+      var top = f; while (top.parentNode !== out) top = top.parentNode;
+      if (top.tagName === 'BLOCKQUOTE' && f.parentNode === top) return;
+      out.insertBefore(f, top.nextSibling);
+    });
+    return out;
+  }
+  function parse(html) { return new DOMParser().parseFromString('<!DOCTYPE html><body>' + (html || '') + '</body>', 'text/html').body; }
+  function htmlOf(frag) {
+    var d = document.createElement('div'); d.appendChild(frag);
+    d.querySelectorAll('figcaption').forEach(function (c) { if (!c.textContent.trim()) c.remove(); });
+    d.querySelectorAll('figure').forEach(function (f) { if (!f.querySelector('img')) f.remove(); });
+    d.querySelectorAll('p,h2,h3,h4,li,blockquote,figcaption').forEach(function (b) {
+      while (b.lastChild && b.lastChild.nodeName === 'BR' && b.childNodes.length > 1) b.lastChild.remove();
+    });
+    d.querySelectorAll('p,h2,h3,h4').forEach(function (b) { if (!b.textContent.trim() && !b.querySelector('img')) b.remove(); });
+    return d.innerHTML.replace(/ /g, '&nbsp;');
+  }
+  function serialize() { return mdMode ? fromMd(mdArea.value) : htmlOf(blocks(clean(ed))); }
+  function prepare(html) {
+    var frag = blocks(clean(parse(html)));
+    frag.querySelectorAll('figure').forEach(function (f) {
+      if (f.classList.contains('video')) { f.setAttribute('contenteditable', 'false'); return; }
+      var c = f.querySelector('figcaption');
+      if (!c) { c = document.createElement('figcaption'); f.appendChild(c); }
+      if (!c.textContent.trim()) { c.innerHTML = '<br>'; c.className = 'vacio'; }
+    });
+    if (!frag.childNodes.length) { var p = document.createElement('p'); p.innerHTML = '<br>'; frag.appendChild(p); }
+    return frag;
+  }
+
+  // ---------- entradas en el navegador ----------
+  function newPost() { var n = localIso(); return { id: uid(), titulo: '', subtitulo: '', portada: '', html: '', creado: n, actualizado: n, publicado: null }; }
+  function isBlank(p) { return !p.titulo.trim() && !p.subtitulo.trim() && !p.portada && !p.html.trim(); }
+  function state(p) {
+    if (!p.publicado) return 'borrador';
+    return Date.parse(p.actualizado) > Date.parse(p.publicado.en) + 1000 ? 'cambios' : 'publicada';
+  }
+  var STATE_TXT = { borrador: 'Borrador', publicada: 'Publicada', cambios: 'Cambios sin publicar' };
+  function saveLocal() {
+    if (!cur) return;
+    if (isBlank(cur) && !cur.publicado) delete posts[cur.id]; else posts[cur.id] = cur;
+    try { localStorage.setItem(LS_POSTS, JSON.stringify(posts)); localStorage.setItem(LS_CUR, cur.id); saveFailed = false; }
+    catch (e) { saveFailed = true; }
+  }
+  var saveFailed = false;
+  function cacheBlog() { try { localStorage.setItem(LS_BLOG, JSON.stringify(blogData)); } catch (e) { /* sin almacenamiento */ } }
+
+  var saveTimer = null;
+  function changed() {
+    if (!cur) return;
+    cur.actualizado = localIso();
+    updateUi();
+    $('estado').textContent = 'Guardando…';
+    clearTimeout(saveTimer); saveTimer = setTimeout(flush, 500);
+  }
+  function flush() {
+    clearTimeout(saveTimer); saveTimer = null;
+    if (!cur) return;
+    cur.titulo = tTitle.value; cur.subtitulo = tSub.value; cur.html = serialize();
+    saveLocal(); renderStatus();
+  }
+  function renderStatus() {
+    var st = state(cur), chip = $('chip');
+    chip.textContent = STATE_TXT[st]; chip.className = 'chip ' + st;
+    var n = P.palabras(cur.html);
+    $('estado').textContent = saveFailed
+      ? '⚠ No cabe en el navegador: conecta la carpeta para guardar las imágenes como archivos'
+      : 'Guardado · ' + n + (n === 1 ? ' palabra' : ' palabras') + (n ? ' · ' + P.minutos(n) + ' min' : '');
+  }
+
+  function openPost(p) {
+    if (cur && saveTimer) flush();
+    cur = p;
+    tTitle.value = p.titulo || ''; tSub.value = p.subtitulo || '';
+    ed.innerHTML = ''; ed.appendChild(prepare(p.html));
+    if (mdMode) { mdArea.value = toMd(p.html); autosize(mdArea); }
+    try { localStorage.setItem(LS_CUR, p.id); } catch (e) { /* sin almacenamiento */ }
+    autosize(tTitle); autosize(tSub);
+    renderCover(); renderByline(); updateUi(); renderStatus();
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- portada, firma, aspecto ----------
+  function renderCover() {
+    var c = $('cover');
+    if (cur.portada) {
+      c.innerHTML = '<figure><img src="' + esc(cur.portada) + '" alt=""><div class="over"><button type="button" data-c="cambiar">Cambiar</button><button type="button" data-c="quitar">Quitar</button></div></figure>';
+    } else c.innerHTML = '<button type="button" class="add" data-c="cambiar">+ Imagen de portada</button>';
+  }
+  $('cover').addEventListener('click', async function (e) {
+    var b = e.target.closest('[data-c]'); if (!b) return;
+    if (b.dataset.c === 'quitar') { cur.portada = ''; renderCover(); changed(); return; }
+    var r = await ask({ titulo: 'Imagen de portada', label: 'Dirección de la imagen', placeholder: 'https://…', archivo: true, ayuda: imgHelp(), value: /^https?:/.test(cur.portada) ? cur.portada : '' });
+    if (!r) return;
+    var src = r.file ? await imageSrc(r.file) : safeUrl(r.value, true);
+    if (src) { cur.portada = src; renderCover(); changed(); }
+  });
+  function renderByline() {
+    var a = blogData.blog.autor;
+    var date = cur.publicado ? P.fecha(cur.publicado.fecha) : P.fecha(localIso());
+    $('byline').innerHTML = (a ? '<span class="avatar" aria-hidden="true">' + esc(a.trim().charAt(0).toUpperCase()) + '</span>' : '') +
+      '<span>' + (a ? '<b>' + esc(a) + '</b>' : '<button type="button" id="setAuthor">Pon tu nombre en los ajustes</button><br>') + esc(date) + '</span>';
+    var sa = $('setAuthor'); if (sa) sa.addEventListener('click', openSettings);
+    $('blogName').textContent = blogData.blog.nombre;
+    document.documentElement.style.setProperty('--blog', blogData.blog.color);
+  }
+  function autosize(t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
+  function isEmptyEd() { return !ed.textContent.trim() && !ed.querySelector('img,hr,figure'); }
+  function updateUi() {
+    if (!ed.firstChild) { ed.innerHTML = '<p><br></p>'; if (document.activeElement === ed) caretTo(ed.firstChild); }
+    ed.classList.toggle('vacio', isEmptyEd() && ed.children.length === 1 && ed.firstElementChild.tagName === 'P');
+    ed.querySelectorAll('figcaption').forEach(function (c) { c.classList.toggle('vacio', !c.textContent.trim()); });
+  }
+
+  // ---------- selección y bloques ----------
+  var lastRange = null;
+  function inEd(node) { return node && (node === ed || ed.contains(node)); }
+  document.addEventListener('selectionchange', function () {
+    var s = getSelection();
+    if (!s.rangeCount || !inEd(s.anchorNode)) return;
+    lastRange = s.getRangeAt(0).cloneRange();
+    refreshToolbar();
+  });
+  function restore(r) {
+    r = r || lastRange;
+    ed.focus({ preventScroll: true });
+    if (r && inEd(r.startContainer)) { var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  }
+  function closest(node, tag) {
+    while (node && node !== ed) { if (node.nodeType === 1 && node.tagName === tag) return node; node = node.parentNode; }
+    return null;
+  }
+  function currentBlock() {
+    var n = lastRange && lastRange.startContainer;
+    if (!inEd(n) || n === ed) return n === ed ? ed.children[lastRange.startOffset] || ed.lastElementChild : null;
+    while (n && n.parentNode !== ed) n = n.parentNode;
+    return n && n.nodeType === 1 ? n : null;
+  }
+  function caretTo(el, atEnd) {
+    var r = document.createRange(); r.selectNodeContents(el); r.collapse(!atEnd);
+    var s = getSelection(); s.removeAllRanges(); s.addRange(r); lastRange = r.cloneRange();
+    ed.focus({ preventScroll: true });
+  }
+  function emptyP() { var p = document.createElement('p'); p.innerHTML = '<br>'; return p; }
+  function isBlankP(el) { return el && el.tagName === 'P' && !el.textContent.trim() && !el.querySelector('img'); }
+  function insertBlock(node) {
+    var b = currentBlock();
+    if (!b) ed.appendChild(node);
+    else if (isBlankP(b)) b.replaceWith(node);
+    else b.after(node);
+    var next = node.nextElementSibling;
+    if (!isBlankP(next)) { next = emptyP(); node.after(next); }
+    caretTo(next);
+    changed();
+  }
+  function refreshToolbar() {
+    ['bold', 'italic', 'strikeThrough'].forEach(function (c) {
+      var b = document.querySelector('[data-cmd="' + c + '"]');
+      try { b.setAttribute('aria-pressed', document.queryCommandState(c)); } catch (e) { /* sin estado */ }
+    });
+    var n = lastRange && lastRange.startContainer;
+    document.querySelector('[data-cmd="code"]').setAttribute('aria-pressed', !!closest(n, 'CODE') && !closest(n, 'PRE'));
+    document.querySelector('[data-cmd="link"]').setAttribute('aria-pressed', !!closest(n, 'A'));
+    document.querySelector('[data-cmd="quote"]').setAttribute('aria-pressed', !!closest(n, 'BLOCKQUOTE'));
+    document.querySelector('[data-cmd="ul"]').setAttribute('aria-pressed', !!closest(n, 'UL'));
+    document.querySelector('[data-cmd="ol"]').setAttribute('aria-pressed', !!closest(n, 'OL'));
+    var blk = closest(n, 'H2') || closest(n, 'H3') || closest(n, 'H4') || closest(n, 'PRE');
+    $('blockSel').value = blk ? blk.tagName.toLowerCase() : 'p';
+  }
+
+  // ---------- comandos ----------
+  $('toolbar').addEventListener('mousedown', function (e) { if (e.target.closest('button')) e.preventDefault(); });
+  $('toolbar').addEventListener('click', function (e) { var b = e.target.closest('[data-cmd]'); if (b) cmd(b.dataset.cmd); });
+  $('blockSel').addEventListener('change', function () {
+    restore();
+    var v = this.value, q = closest(lastRange && lastRange.startContainer, 'BLOCKQUOTE');
+    if (q && v !== 'p') unquote(q);
+    document.execCommand('formatBlock', false, '<' + v + '>');
+    changed(); refreshToolbar();
+  });
+  function cmd(name) {
+    if (name === 'link') return linkDialog();
+    if (name === 'image') return imageDialog();
+    if (name === 'video') return videoDialog();
+    restore();
+    switch (name) {
+      case 'bold': case 'italic': case 'strikeThrough': case 'undo': case 'redo': document.execCommand(name); break;
+      case 'ul': document.execCommand('insertUnorderedList'); break;
+      case 'ol': document.execCommand('insertOrderedList'); break;
+      case 'code': inlineCode(); break;
+      case 'quote': var q = closest(lastRange && lastRange.startContainer, 'BLOCKQUOTE'); if (q) unquote(q); else document.execCommand('formatBlock', false, '<blockquote>'); break;
+      case 'hr': insertBlock(document.createElement('hr')); return;
+    }
+    changed(); refreshToolbar();
+  }
+  function inlineCode() {
+    var r = lastRange; if (!r) return;
+    var c = closest(r.startContainer, 'CODE');
+    if (c && !closest(c, 'PRE')) { c.replaceWith(document.createTextNode(c.textContent)); return; }
+    if (!r.collapsed) document.execCommand('insertHTML', false, '<code>' + esc(r.toString()) + '</code>');
+  }
+  function unquote(q) {
+    var frag = document.createDocumentFragment(), p = null, first = null;
+    Array.prototype.slice.call(q.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && BLOCKS[n.tagName]) { p = null; frag.appendChild(n); first = first || n; }
+      else { if (!p) { p = document.createElement('p'); frag.appendChild(p); first = first || p; } p.appendChild(n); }
+    });
+    q.replaceWith(frag);
+    if (first) caretTo(first, true);
+  }
+  function fixUrl(u) {
+    u = String(u || '').trim(); if (!u) return '';
+    if (/^(https?:|mailto:|#|\/|\.)/i.test(u)) return u;
+    if (/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(u)) return 'mailto:' + u;
+    return 'https://' + u;
+  }
+  async function linkDialog() {
+    var r = lastRange && lastRange.cloneRange();
+    var a = r && closest(r.startContainer, 'A');
+    var res = await ask({ titulo: a ? 'Editar enlace' : 'Añadir enlace', label: 'Dirección', placeholder: 'https://…', value: a ? a.getAttribute('href') : '', borrar: !!a });
+    if (!res) { restore(r); return; }
+    restore(r);
+    var url = safeUrl(fixUrl(res.value));
+    if (res.borrar || !url) {
+      if (a) { var rr = document.createRange(); rr.selectNodeContents(a); restore(rr); }
+      document.execCommand('unlink');
+    } else if (a) a.setAttribute('href', url);
+    else if (!r || r.collapsed) document.execCommand('insertHTML', false, '<a href="' + esc(url) + '">' + esc(url.replace(/^(https?:\/\/|mailto:)/, '')) + '</a>');
+    else document.execCommand('createLink', false, url);
+    changed();
+  }
+  function imgHelp() {
+    return dir ? 'Los archivos se copian a ' + dir.name + '/imagenes/.'
+      : 'Sin la carpeta conectada, la imagen se incrusta en la propia página (reducida a 1600 px).';
+  }
+  async function imageDialog() {
+    var r = lastRange && lastRange.cloneRange();
+    var res = await ask({ titulo: 'Añadir imagen', label: 'Dirección de la imagen', placeholder: 'https://…', archivo: true, ayuda: imgHelp() });
+    restore(r);
+    if (!res) return;
+    var src = res.file ? await imageSrc(res.file) : safeUrl(res.value, true);
+    if (src) insertBlock(imageFig(src));
+  }
+  async function videoDialog() {
+    var r = lastRange && lastRange.cloneRange();
+    var res = await ask({ titulo: 'Añadir vídeo', label: 'Enlace del vídeo de YouTube', placeholder: 'https://www.youtube.com/watch?v=…' });
+    restore(r);
+    if (!res) return;
+    var id = ytId(fixUrl(res.value));
+    if (!id) { toast('Por ahora solo se pueden insertar vídeos de YouTube'); return; }
+    insertVideo(id);
+  }
+  function insertVideo(id) { var f = videoFig(id); f.setAttribute('contenteditable', 'false'); insertBlock(f); }
+
+  // imágenes: con carpeta se guardan como archivo; sin ella, incrustadas y reducidas
+  function shrink(file, max) {
+    return new Promise(function (res) {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return res(file);
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        var k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        if (k === 1 && file.size < 1200000) return res(file);
+        var c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        var type = file.type === 'image/png' && file.size < 600000 ? 'image/png' : 'image/jpeg';
+        c.toBlob(function (b) { res(b || file); }, type, 0.86);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); res(file); };
+      img.src = url;
+    });
+  }
+  var EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif', 'image/webp': 'webp', 'image/avif': 'avif', 'image/svg+xml': 'svg' };
+  async function imageSrc(file) {
+    if (!/^image\//.test(file.type)) { toast('Eso no es una imagen'); return ''; }
+    if (dir) {
+      try {
+        var blob = await shrink(file, 2400);
+        var base = P.slugify(file.name.replace(/\.[^.]+$/, '')).slice(0, 40);
+        var name = base + '-' + Date.now().toString(36) + '.' + (EXT[blob.type || file.type] || 'img');
+        var d = await dir.getDirectoryHandle('imagenes', { create: true });
+        await writeFile(d, name, blob);
+        return 'imagenes/' + name;
+      } catch (e) { toast('No he podido copiar la imagen a la carpeta; la incrusto en la página.'); }
+    }
+    if (file.type === 'image/svg+xml') { toast('Las imágenes SVG solo se pueden añadir con la carpeta conectada'); return ''; }
+    var b = await shrink(file, 1600);
+    return await new Promise(function (res) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.onerror = function () { res(''); }; fr.readAsDataURL(b); });
+  }
+
+  // ---------- teclado, pegar, soltar ----------
+  var MD = { '#': 'h2', '##': 'h2', '###': 'h3', '####': 'h4', '>': 'blockquote', '-': 'ul', '*': 'ul', '1.': 'ol', '```': 'pre' };
+  ed.addEventListener('input', function (e) {
+    if (ed.firstChild && ed.firstChild.nodeType === 3) document.execCommand('formatBlock', false, '<p>');
+    if (e.inputType === 'insertText' && e.data === ' ') markdown();
+    changed();
+  });
+  function markdown() {
+    var s = getSelection(); if (!s.rangeCount) return;
+    var b = s.anchorNode; while (b && b.parentNode !== ed) b = b.parentNode;
+    if (!b || b.tagName !== 'P') return;
+    var r = document.createRange(); r.setStart(b, 0); r.setEnd(s.anchorNode, s.anchorOffset);
+    var pre = r.toString().replace(/ /g, ' ');
+    if (pre.slice(-1) !== ' ') return;
+    var kind = MD[pre.slice(0, -1)]; if (!kind) return;
+    s.removeAllRanges(); s.addRange(r); document.execCommand('delete');
+    if (kind === 'ul') document.execCommand('insertUnorderedList');
+    else if (kind === 'ol') document.execCommand('insertOrderedList');
+    else document.execCommand('formatBlock', false, '<' + kind + '>');
+  }
+  ed.addEventListener('keydown', function (e) {
+    var mod = e.ctrlKey || e.metaKey;
+    if (mod && e.key.toLowerCase() === 'k') { e.preventDefault(); linkDialog(); return; }
+    if (selFig && (e.key === 'Backspace' || e.key === 'Delete')) {
+      e.preventDefault();
+      var next = selFig.nextElementSibling || selFig.previousElementSibling;
+      selFig.remove(); selFig = null;
+      if (!next) { next = emptyP(); ed.appendChild(next); }
+      caretTo(next); changed(); return;
+    }
+    if (selFig && !mod && e.key.length === 1) { e.preventDefault(); return; }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      var s = getSelection(), b = s.anchorNode; while (b && b.parentNode !== ed) b = b.parentNode;
+      if (b && b.tagName === 'P' && /^(-{3,}|\*{3,})$/.test(b.textContent.trim())) {
+        e.preventDefault(); var hr = document.createElement('hr'), p = emptyP();
+        b.replaceWith(hr); hr.after(p); caretTo(p); changed();
+      }
+    }
+  });
+  // pulsar una imagen la selecciona (Supr o Retroceso la quita)
+  var selFig = null;
+  function selectFig(f) {
+    if (selFig) selFig.classList.remove('sel');
+    selFig = f || null;
+    if (selFig) selFig.classList.add('sel');
+  }
+  ed.addEventListener('mousedown', function (e) {
+    var f = e.target.tagName === 'IMG' && e.target.closest('figure');
+    selectFig(f);
+    if (f) { e.preventDefault(); var r = document.createRange(); r.selectNode(f); var s = getSelection(); s.removeAllRanges(); s.addRange(r); ed.focus({ preventScroll: true }); }
+  });
+  document.addEventListener('mousedown', function (e) { if (!ed.contains(e.target)) selectFig(null); });
+  ed.addEventListener('keyup', function (e) { if (selFig && !/^(Shift|Control|Meta|Alt)$/.test(e.key)) selectFig(null); });
+
+  ed.addEventListener('paste', function (e) {
+    var cd = e.clipboardData; if (!cd) return;
+    var files = Array.prototype.filter.call(cd.files || [], function (f) { return /^image\//.test(f.type); });
+    if (files.length) { e.preventDefault(); insertFiles(files); return; }
+    var text = cd.getData('text/plain'), html = cd.getData('text/html'), one = text.trim();
+    var inPre = closest(lastRange && lastRange.startContainer, 'PRE');
+    if (inPre) { e.preventDefault(); document.execCommand('insertText', false, text); return; }
+    if (/^https?:\/\/\S+$/.test(one)) {
+      var id = ytId(one), b = currentBlock();
+      if (id && isBlankP(b)) { e.preventDefault(); insertVideo(id); return; }
+      if (lastRange && !lastRange.collapsed) { e.preventDefault(); document.execCommand('createLink', false, one); changed(); return; }
+    }
+    e.preventDefault();
+    if (html) {
+      var out = htmlOf(blocks(clean(parse(html))));
+      if (out) document.execCommand('insertHTML', false, out);
+    } else if (/\n/.test(text)) {
+      var paras = text.replace(/\r/g, '').split(/\n{2,}/).map(function (p) { return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>'; });
+      document.execCommand('insertHTML', false, paras.join(''));
+    } else document.execCommand('insertText', false, text);
+    tidy(); changed();
+  });
+  // tras pegar: saca figuras de dentro de párrafos y deja editables los pies de foto
+  function tidy() {
+    ed.querySelectorAll('figure').forEach(function (f) {
+      if (f.parentNode !== ed) { var top = f; while (top.parentNode !== ed) top = top.parentNode; if (top.tagName !== 'BLOCKQUOTE') top.after(f); }
+      if (f.classList.contains('video')) f.setAttribute('contenteditable', 'false');
+      else if (!f.querySelector('figcaption')) { var c = document.createElement('figcaption'); c.innerHTML = '<br>'; f.appendChild(c); }
+    });
+  }
+  async function insertFiles(files) {
+    for (var i = 0; i < files.length; i++) { var src = await imageSrc(files[i]); if (src) insertBlock(imageFig(src)); }
+  }
+  ed.addEventListener('dragover', function (e) { if (e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types, 'Files') !== -1) e.preventDefault(); });
+  ed.addEventListener('drop', function (e) {
+    var files = Array.prototype.filter.call(e.dataTransfer.files || [], function (f) { return /^image\//.test(f.type); });
+    if (!files.length) return;
+    e.preventDefault();
+    var r = document.caretRangeFromPoint ? document.caretRangeFromPoint(e.clientX, e.clientY) : null;
+    if (r && inEd(r.startContainer)) lastRange = r;
+    insertFiles(files);
+  });
+
+  tTitle.addEventListener('input', function () { autosize(tTitle); changed(); });
+  tSub.addEventListener('input', function () { autosize(tSub); changed(); });
+  tTitle.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); tSub.focus(); } });
+  tSub.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); caretTo(ed.firstElementChild || ed); } });
+  window.addEventListener('resize', function () { autosize(tTitle); autosize(tSub); });
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); flush(); toast(saveFailed ? 'No cabe en el navegador' : 'Guardado en este navegador'); }
+  });
+  window.addEventListener('beforeunload', function () { if (saveTimer) flush(); });
+
+  // ---------- modo Markdown ----------
+  // HTML del editor → Markdown con un conversor propio (el HTML ya viene limpio: pocas etiquetas).
+  // Markdown → HTML con marked y después el mismo filtro que al pegar (clean/blocks/htmlOf).
+  // Las imágenes pegadas (data:…) se muestran como «pegada:N» para no llenar el texto de base64.
+  var mdMode = false, mdArea = $('md'), LS_MODO = 'claude-substack.modo';
+  var pegadas = {}, pegadasN = 0, pegadasInv = {};
+  function token(src) {
+    if (!/^data:/.test(src)) return src;
+    if (!pegadasInv[src]) { pegadasN++; pegadasInv[src] = 'pegada:' + pegadasN; pegadas['pegada:' + pegadasN] = src; }
+    return pegadasInv[src];
+  }
+  // escapa solo lo que Markdown interpretaría: «guion_bajo» y «2 * 3» quedan tal cual
+  function mdEsc(t) {
+    var w = /[\p{L}\p{N}]/u, sp = /\s/;
+    return t.replace(/ /g, ' ').replace(/[\\`~\[\]*_]/g, function (c, i, str) {
+      var a = str[i - 1] || ' ', b = str[i + 1] || ' ';
+      if (c === '_' && w.test(a) && w.test(b)) return c;
+      if (c === '*' && sp.test(a) && sp.test(b)) return c;
+      return '\\' + c;
+    });
+  }
+  function mdInline(n) {
+    var out = '';
+    Array.prototype.forEach.call(n.childNodes, function (c) {
+      if (c.nodeType === 3) { out += mdEsc(c.nodeValue); return; }
+      if (c.nodeType !== 1) return;
+      var t = c.tagName, x;
+      if (t === 'BR') out += '\\\n';
+      else if (t === 'STRONG') out += (x = mdInline(c)).trim() ? '**' + x + '**' : x;
+      else if (t === 'EM') out += (x = mdInline(c)).trim() ? '*' + x + '*' : x;
+      else if (t === 'S') out += (x = mdInline(c)).trim() ? '~~' + x + '~~' : x;
+      else if (t === 'CODE') { x = c.textContent; out += /`/.test(x) ? '`` ' + x + ' ``' : '`' + x + '`'; }
+      else if (t === 'A') out += '[' + mdInline(c) + '](' + (c.getAttribute('href') || '').replace(/[()\s]/g, encodeURIComponent) + ')';
+      else if (t === 'IMG') out += '![' + mdEsc(c.getAttribute('alt') || '') + '](' + token(c.getAttribute('src') || '') + ')';
+      else if (t === 'SUB' || t === 'SUP') out += '<' + t.toLowerCase() + '>' + mdInline(c) + '</' + t.toLowerCase() + '>';
+      else out += mdInline(c);
+    });
+    return out;
+  }
+  function preText(n) {
+    var t = '';
+    Array.prototype.forEach.call(n.childNodes, function (c) { t += c.nodeType === 3 ? c.nodeValue : c.nodeName === 'BR' ? '\n' : preText(c); });
+    return t;
+  }
+  function mdList(list, depth) {
+    var ind = '   '.repeat(depth), i = 0, ol = list.tagName === 'OL';
+    return Array.prototype.map.call(list.children, function (li) {
+      i++;
+      var head = '', sub = '';
+      Array.prototype.forEach.call(li.childNodes, function (c) {
+        if (c.nodeType === 1 && (c.tagName === 'UL' || c.tagName === 'OL')) sub += '\n' + mdList(c, depth + 1);
+        else { var w = document.createElement('span'); w.appendChild(c.cloneNode(true)); head += mdInline(w); }
+      });
+      return ind + (ol ? i + '. ' : '- ') + head.trim().replace(/\n/g, '\n' + ind + '   ') + sub;
+    }).join('\n');
+  }
+  function mdBlocks(root) {
+    return Array.prototype.map.call(root.children, function (b) {
+      var t = b.tagName;
+      if (t === 'P') return mdInline(b).trim();
+      if (t === 'H2' || t === 'H3' || t === 'H4') return '#'.repeat(+t[1]) + ' ' + mdInline(b).trim();
+      if (t === 'PRE') return '```\n' + preText(b).replace(/\n$/, '') + '\n```';
+      if (t === 'BLOCKQUOTE') {
+        var inner = b.querySelector('p,h2,h3,h4,ul,ol,pre,figure,hr') ? mdBlocks(b) : mdInline(b).trim();
+        return inner.split('\n').map(function (l) { return l ? '> ' + l : '>'; }).join('\n');
+      }
+      if (t === 'UL' || t === 'OL') return mdList(b, 0);
+      if (t === 'HR') return '---';
+      if (t === 'FIGURE') {
+        var yid = b.getAttribute('data-youtube');
+        if (yid) return 'https://www.youtube.com/watch?v=' + yid;
+        var img = b.querySelector('img'); if (!img) return '';
+        var cap = b.querySelector('figcaption'), ct = cap ? cap.textContent.trim().replace(/"/g, '\\"') : '';
+        return '![' + mdEsc(img.getAttribute('alt') || '') + '](' + token(img.getAttribute('src') || '') + (ct ? ' "' + ct + '"' : '') + ')';
+      }
+      return mdInline(b).trim();
+    }).filter(Boolean).join('\n\n');
+  }
+  function toMd(html) { return mdBlocks(parse(html)); }
+
+  function fromMd(md) {
+    if (!window.marked) return cur ? cur.html : '';
+    var body = parse(marked.parse(md || '', { gfm: true, breaks: false }));
+    // imágenes pegadas: vuelve a poner sus datos
+    body.querySelectorAll('img').forEach(function (i) { var s = i.getAttribute('src'); if (pegadas[s]) i.setAttribute('src', pegadas[s]); });
+    // un párrafo con solo una imagen → figura (el título de la imagen es el pie de foto)
+    // un párrafo con solo una dirección de YouTube → vídeo
+    body.querySelectorAll('p').forEach(function (p) {
+      var els = p.children, txt = p.textContent.trim();
+      if (els.length === 1 && els[0].tagName === 'IMG' && !txt) {
+        var img = els[0], f = imageFig(img.getAttribute('src'));
+        f.querySelector('img').alt = img.getAttribute('alt') || '';
+        var cap = f.querySelector('figcaption'); cap.className = ''; cap.textContent = img.getAttribute('title') || '';
+        p.replaceWith(f); return;
+      }
+      var id = /^https?:\/\/\S+$/.test(txt) && ytId(txt);
+      if (id && (!els.length || (els.length === 1 && els[0].tagName === 'A'))) p.replaceWith(videoFig(id));
+    });
+    return htmlOf(blocks(clean(body)));
+  }
+
+  function setMode(md, quiet) {
+    if (md === mdMode) return;
+    if (md && !window.marked) { toast('No se ha podido cargar el conversor de Markdown (¿sin conexión?)'); return; }
+    if (cur) flush();                                  // guarda lo que haya en el modo actual
+    if (md) {
+      mdArea.value = toMd(cur ? cur.html : '');
+    } else {
+      ed.innerHTML = ''; ed.appendChild(prepare(fromMd(mdArea.value)));
+    }
+    mdMode = md;
+    document.body.classList.toggle('modo-md', md);
+    mdArea.hidden = !md;
+    $('mdBtn').setAttribute('aria-pressed', String(md));
+    try { localStorage.setItem(LS_MODO, md ? 'md' : 'visual'); } catch (e) { /* sin almacenamiento */ }
+    if (md) { autosize(mdArea); if (!quiet) mdArea.focus(); }
+    else { updateUi(); if (!quiet) caretTo(ed.firstElementChild || ed); }
+  }
+  $('mdBtn').addEventListener('click', function () { setMode(!mdMode); });
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'm') { e.preventDefault(); setMode(!mdMode); }
+  });
+  mdArea.addEventListener('input', function () { autosize(mdArea); changed(); });
+  // Tab inserta sangría en lugar de salir del área de texto
+  mdArea.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); document.execCommand('insertText', false, '    '); }
+  });
+  // pegar o soltar imágenes en Markdown: se guardan igual que en el editor visual
+  async function mdImages(files) {
+    for (var i = 0; i < files.length; i++) {
+      var src = await imageSrc(files[i]);
+      if (src) { mdArea.focus(); document.execCommand('insertText', false, '\n\n![](' + token(src) + ')\n\n'); }
+    }
+  }
+  mdArea.addEventListener('paste', function (e) {
+    var files = Array.prototype.filter.call((e.clipboardData && e.clipboardData.files) || [], function (f) { return /^image\//.test(f.type); });
+    if (files.length) { e.preventDefault(); mdImages(files); }
+  });
+  mdArea.addEventListener('drop', function (e) {
+    var files = Array.prototype.filter.call(e.dataTransfer.files || [], function (f) { return /^image\//.test(f.type); });
+    if (files.length) { e.preventDefault(); mdImages(files); }
+  });
+  window.addEventListener('resize', function () { if (mdMode) autosize(mdArea); });
+
+  // ---------- diálogo genérico ----------
+  var askFileCb = null;
+  function ask(o) {
+    return new Promise(function (resolve) {
+      var d = $('ask'), i = $('askIn'), done = false;
+      $('askT').textContent = o.titulo; $('askL').textContent = o.label;
+      i.value = o.value || ''; i.placeholder = o.placeholder || '';
+      $('askH').textContent = o.ayuda || ''; $('askH').hidden = !o.ayuda;
+      $('askFile').hidden = !o.archivo; $('askDel').hidden = !o.borrar;
+      function fin(v) { if (done) return; done = true; askFileCb = null; d.removeEventListener('close', onClose); resolve(v); }
+      function onClose() { fin(d.returnValue === 'ok' ? { value: i.value } : d.returnValue === 'del' ? { borrar: true } : null); }
+      d.addEventListener('close', onClose);
+      askFileCb = function (file) { fin({ file: file }); d.close(); };
+      d.returnValue = ''; d.showModal(); i.focus(); i.select();
+    });
+  }
+  $('askFile').addEventListener('click', function () { $('filePick').value = ''; $('filePick').click(); });
+  $('filePick').addEventListener('change', function () { var f = this.files[0]; if (f && askFileCb) askFileCb(f); });
+
+  // ---------- carpeta del blog ----------
+  function idb(mode, fn) {
+    return new Promise(function (res, rej) {
+      var r = indexedDB.open('claude-clon-substack', 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore('kv'); };
+      r.onerror = function () { rej(r.error); };
+      r.onsuccess = function () {
+        var tx = r.result.transaction('kv', mode), st = tx.objectStore('kv'), q = fn(st);
+        tx.oncomplete = function () { res(q && q.result); }; tx.onerror = function () { rej(tx.error); };
+      };
+    });
+  }
+  async function writeFile(handle, name, content) {
+    var fh = await handle.getFileHandle(name, { create: true });
+    var w = await fh.createWritable(); await w.write(content); await w.close();
+  }
+  async function readFile(handle, name) { var fh = await handle.getFileHandle(name); return await (await fh.getFile()).text(); }
+  async function connect(handle, quiet) {
+    try {
+      blogData = normBlog(JSON.parse(await readFile(handle, 'posts.json')));
+    } catch (e) {
+      if (e.name !== 'NotFoundError') { toast('No he podido leer posts.json: ¿está bien escrito el JSON?', null, null, 8000); return; }
+    }
+    dir = handle; pendingHandle = null; cacheBlog();
+    try { await idb('readwrite', function (st) { return st.put(handle, 'dir'); }); } catch (e) { /* no se recordará */ }
+    renderFolder(); renderByline();
+    if (!quiet) toast('Carpeta conectada: ' + handle.name);
+  }
+  async function pickFolder() {
+    try {
+      if (pendingHandle && (await pendingHandle.requestPermission({ mode: 'readwrite' })) === 'granted') { await connect(pendingHandle); return !!dir; }
+      var h = await window.showDirectoryPicker({ id: 'claude-clon-substack', mode: 'readwrite', startIn: 'documents' });
+      if (h.name !== DIRNAME && !confirm('La carpeta se llama «' + h.name + '», no «' + DIRNAME + '». ¿Usarla igualmente?')) return false;
+      await connect(h); return !!dir;
+    } catch (e) { if (e.name !== 'AbortError') toast('No se ha podido abrir la carpeta: ' + (e.message || e)); return false; }
+  }
+  function renderFolder() {
+    var b = $('folderBtn');
+    b.hidden = !canFolder;
+    b.classList.toggle('ok', !!dir);
+    b.textContent = dir ? '✓ ' + dir.name : pendingHandle ? 'Reconectar carpeta' : 'Conectar carpeta';
+    b.title = dir ? 'Publicando en la carpeta ' + dir.name : 'Elige la carpeta ' + DIRNAME + ' para publicar directamente en ella';
+  }
+  $('folderBtn').addEventListener('click', function () { if (!dir) pickFolder(); });
+
+  // ---------- publicar ----------
+  function sortEntradas() { blogData.entradas.sort(function (a, b) { return String(b.fecha).localeCompare(String(a.fecha)); }); }
+  async function writeBlogFiles() {
+    sortEntradas();
+    await writeFile(dir, 'posts.json', JSON.stringify(blogData, null, 2) + '\n');
+    await writeFile(dir, 'index.html', P.index(blogData.blog, blogData.entradas));
+  }
+  function downloadBlogFiles(delay) {
+    sortEntradas();
+    setTimeout(function () { download('index.html', P.index(blogData.blog, blogData.entradas)); }, delay || 0);
+    setTimeout(function () { download('posts.json', JSON.stringify(blogData, null, 2) + '\n', 'application/json'); }, (delay || 0) + 400);
+  }
+  function pubWhere() {
+    var slug = $('pSlug').value || '…';
+    $('pWhere').innerHTML = dir
+      ? 'Se escribirá <b>' + esc(dir.name) + '/posts/' + esc(slug) + '.html</b> y se actualizará la portada del blog (<b>index.html</b> y <b>posts.json</b>).'
+      : 'Se descargarán tres archivos: <b>' + esc(slug) + '.html</b> (va en ' + DIRNAME + '/posts/), <b>index.html</b> y <b>posts.json</b> (van en ' + DIRNAME + '/).' + (canFolder ? ' Si conectas la carpeta, se escriben solos.' : '');
+    $('pConnect').hidden = !!dir || !canFolder;
+  }
+  $('pSlug').addEventListener('input', function () { this.value = this.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'); pubWhere(); });
+  $('pConnect').addEventListener('click', async function () { if (await pickFolder()) pubWhere(); });
+  $('pubBtn').addEventListener('click', function () {
+    flush();
+    if (!cur.titulo.trim()) { toast('Ponle un título antes de publicar'); tTitle.focus(); return; }
+    if (!cur.html.trim()) { toast('La entrada está vacía'); caretTo(ed.firstElementChild || ed); return; }
+    $('pubT').textContent = cur.publicado ? 'Actualizar entrada publicada' : 'Publicar entrada';
+    $('pOk').textContent = cur.publicado ? 'Actualizar' : 'Publicar';
+    $('pSlug').value = cur.publicado ? cur.publicado.slug : P.slugify(cur.titulo);
+    $('pDate').value = (cur.publicado ? cur.publicado.fecha : localIso()).slice(0, 10);
+    pubWhere();
+    $('pub').returnValue = ''; $('pub').showModal();
+  });
+  $('pub').addEventListener('close', function () { if ($('pub').returnValue === 'ok') publish($('pSlug').value, $('pDate').value); });
+
+  async function publish(slug, day) {
+    slug = P.slugify(slug);
+    var other = blogData.entradas.find(function (x) { return x.slug === slug && x.id !== cur.id; });
+    if (other) { toast('Ya hay otra entrada publicada en posts/' + slug + '.html; elige otra dirección.', null, null, 6000); return; }
+    var now = localIso();
+    var prev = cur.publicado;
+    var fecha = (day || now.slice(0, 10)) + ((prev && prev.fecha.slice(0, 10) === day) ? prev.fecha.slice(10) : now.slice(10));
+    var html = cur.html;
+    var meta = { id: cur.id, slug: slug, titulo: cur.titulo.trim(), subtitulo: cur.subtitulo.trim(), portada: cur.portada, autor: blogData.blog.autor, fecha: fecha, actualizado: now, palabras: P.palabras(html) };
+    var page = P.post(Object.assign({ html: html }, meta), blogData.blog);
+    blogData.entradas = blogData.entradas.filter(function (x) { return x.id !== cur.id && !(prev && x.slug === prev.slug); });
+    blogData.entradas.push(meta);
+    try {
+      if (dir) {
+        var pd = await dir.getDirectoryHandle('posts', { create: true });
+        await writeFile(pd, slug + '.html', page);
+        if (prev && prev.slug !== slug) { try { await pd.removeEntry(prev.slug + '.html'); } catch (e) { /* ya no estaba */ } }
+        await writeBlogFiles();
+      } else {
+        download(slug + '.html', page);
+        downloadBlogFiles(400);
+      }
+    } catch (e) { toast('No he podido publicar: ' + (e.message || e), null, null, 8000); return; }
+    cacheBlog();
+    cur.publicado = { slug: slug, fecha: fecha, en: localIso() };
+    cur.actualizado = cur.publicado.en;
+    saveLocal(); renderStatus(); renderByline();
+    toast(dir ? (prev ? 'Entrada actualizada' : 'Entrada publicada') : 'Descargados: copia los archivos a ' + DIRNAME, dir ? 'Ver' : null,
+      dir ? function () { window.open('posts/' + slug + '.html', '_blank', 'noopener'); } : null, dir ? 6500 : 9000);
+  }
+
+  $('prevBtn').addEventListener('click', function () {
+    flush();
+    var raiz = new URL('./', location.href).href;
+    var page = P.post({ id: cur.id, slug: 'vista-previa', titulo: cur.titulo.trim() || 'Sin título', subtitulo: cur.subtitulo.trim(), portada: cur.portada, autor: blogData.blog.autor, fecha: cur.publicado ? cur.publicado.fecha : localIso(), html: cur.html }, blogData.blog, { raiz: raiz });
+    var w = window.open(URL.createObjectURL(new Blob([page], { type: 'text/html' })), '_blank');
+    if (!w) toast('El navegador ha bloqueado la ventana de vista previa');
+  });
+
+  // ---------- leer una entrada publicada ----------
+  function fromHtml(text) {
+    var doc = new DOMParser().parseFromString(text, 'text/html');
+    var f = doc.getElementById('fuente'), body = doc.querySelector('.cuerpo');
+    if (!f || !body) throw new Error('no es una entrada de este blog');
+    var src = JSON.parse(f.textContent), now = localIso();
+    return {
+      id: src.id || uid(), titulo: src.titulo || '', subtitulo: src.subtitulo || '', portada: src.portada || '',
+      html: htmlOf(blocks(clean(body))), creado: src.fecha || now, actualizado: now,
+      publicado: src.slug ? { slug: src.slug, fecha: src.fecha || now, en: now } : null
+    };
+  }
+  async function loadPublished(e) {
+    try {
+      var text = dir ? await readFile(await dir.getDirectoryHandle('posts'), e.slug + '.html') : await fetchText('posts/' + e.slug + '.html');
+      var p = fromHtml(text); p.id = e.id || p.id;
+      posts[p.id] = p; return p;
+    } catch (err) {
+      toast('No he podido abrir posts/' + e.slug + '.html' + (dir || location.protocol !== 'file:' ? '' : ': conecta la carpeta o usa «Abrir un .html publicado»'), null, null, 7000);
+      return null;
+    }
+  }
+
+  // ---------- panel de entradas ----------
+  function allItems() {
+    var items = Object.keys(posts).map(function (id) { var p = posts[id]; return { id: id, titulo: p.titulo, fecha: p.actualizado, st: state(p), local: true, slug: p.publicado && p.publicado.slug }; });
+    blogData.entradas.forEach(function (e) {
+      var it = items.find(function (x) { return x.id === e.id || (x.slug && x.slug === e.slug); });
+      if (it) it.pub = e;
+      else items.push({ id: e.id, titulo: e.titulo, fecha: e.fecha, st: 'publicada', local: false, slug: e.slug, pub: e });
+    });
+    return items.sort(function (a, b) { return String(b.fecha).localeCompare(String(a.fecha)); });
+  }
+  function renderList() {
+    var items = allItems();
+    $('entList').innerHTML = items.length ? items.map(function (it, i) {
+      var del = it.pub ? 'Retirar del blog' : 'Borrar borrador';
+      return '<li class="' + (cur && it.id === cur.id ? 'actual' : '') + '" data-i="' + i + '">' +
+        '<button type="button" class="open" data-a="open"><b>' + esc(it.titulo || 'Sin título') + '</b>' +
+        '<small><span class="chip ' + it.st + '">' + STATE_TXT[it.st] + '</span>' + esc(P.fecha(it.fecha)) + '</small></button>' +
+        '<button type="button" class="ibtn" data-a="del" title="' + del + '" aria-label="' + del + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></li>';
+    }).join('') : '<li class="entempty">Aún no hay entradas.</li>';
+    $('entList').items = items;
+  }
+  $('entBtn').addEventListener('click', function () { flush(); renderList(); $('ent').showModal(); });
+  $('entClose').addEventListener('click', function () { $('ent').close(); });
+  $('ent').addEventListener('click', function (e) { if (e.target === $('ent')) $('ent').close(); });
+  $('newBtn').addEventListener('click', function () { $('ent').close(); openPost(newPost()); tTitle.focus(); });
+  $('importBtn').addEventListener('click', function () { $('htmlPick').value = ''; $('htmlPick').click(); });
+  $('htmlPick').addEventListener('change', async function () {
+    var f = this.files[0]; if (!f) return;
+    try {
+      var p = fromHtml(await f.text());
+      var same = Object.keys(posts).find(function (id) { return id === p.id; });
+      if (same && !confirm('Ya tienes esta entrada en el navegador. ¿Sustituirla por la versión del archivo?')) return;
+      posts[p.id] = p; $('ent').close(); openPost(p); saveLocal();
+      toast('Abierta «' + (p.titulo || 'Sin título') + '»');
+    } catch (e) { toast('Ese archivo no es una entrada de este blog'); }
+  });
+  $('entList').addEventListener('click', async function (e) {
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var it = $('entList').items[+b.closest('li').dataset.i]; if (!it) return;
+    if (b.dataset.a === 'open') {
+      var p = it.local ? posts[it.id] : await loadPublished(it.pub);
+      if (p) { $('ent').close(); openPost(p); }
+      return;
+    }
+    if (it.pub) await retire(it);
+    else {
+      if (!confirm('¿Borrar el borrador «' + (it.titulo || 'Sin título') + '»? No se puede deshacer.')) return;
+      delete posts[it.id];
+      if (cur && cur.id === it.id) { var rest = Object.keys(posts).map(function (k) { return posts[k]; }); openPost(rest[0] || newPost()); }
+      saveLocal();
+    }
+    renderList();
+  });
+  async function retire(it) {
+    if (!confirm('¿Retirar «' + it.titulo + '» del blog? Se borra posts/' + it.slug + '.html y desaparece de la portada. El texto se queda aquí como borrador.')) return;
+    var local = posts[it.id];
+    if (local) { local.publicado = null; }
+    else { var p = await loadPublished(it.pub); if (p) { p.publicado = null; posts[p.id] = p; } }
+    blogData.entradas = blogData.entradas.filter(function (x) { return x.slug !== it.slug; });
+    cacheBlog();
+    try {
+      if (dir) {
+        try { await (await dir.getDirectoryHandle('posts')).removeEntry(it.slug + '.html'); } catch (e) { /* ya no estaba */ }
+        await writeBlogFiles();
+        toast('Entrada retirada del blog');
+      } else {
+        downloadBlogFiles();
+        toast('Sustituye index.html y posts.json y borra posts/' + it.slug + '.html a mano', null, null, 9000);
+      }
+    } catch (e) { toast('No he podido actualizar la carpeta: ' + (e.message || e)); }
+    try { localStorage.setItem(LS_POSTS, JSON.stringify(posts)); } catch (e) { /* sin almacenamiento */ }
+    if (cur) renderStatus();
+  }
+
+  // ---------- ajustes ----------
+  function openSettings() {
+    var b = blogData.blog;
+    $('aNombre').value = b.nombre; $('aDesc').value = b.descripcion; $('aAutor').value = b.autor; $('aColor').value = b.color;
+    $('aRegen').hidden = !dir || !blogData.entradas.length;
+    $('aHint').textContent = dir ? 'Al guardar se actualiza la portada del blog. Las entradas ya publicadas cambian al regenerarlas.' : 'Se guardan en este navegador y en posts.json la próxima vez que publiques.';
+    $('aj').returnValue = ''; $('aj').showModal();
+  }
+  $('ajBtn').addEventListener('click', openSettings);
+  $('aj').addEventListener('close', async function () {
+    if ($('aj').returnValue !== 'ok') return;
+    var b = blogData.blog, old = JSON.stringify(b);
+    b.nombre = $('aNombre').value.trim() || 'Mi blog'; b.descripcion = $('aDesc').value.trim(); b.autor = $('aAutor').value.trim(); b.color = $('aColor').value;
+    if (JSON.stringify(b) === old) return;
+    blogData.entradas.forEach(function (e) { e.autor = b.autor; });
+    cacheBlog(); renderByline();
+    if (dir) {
+      try { await writeBlogFiles(); } catch (e) { toast('No he podido escribir en la carpeta: ' + (e.message || e)); return; }
+      if (blogData.entradas.length) toast('Ajustes guardados. ¿Aplicarlos también a las entradas publicadas?', 'Regenerar', regenerate, 9000);
+      else toast('Ajustes guardados');
+    } else toast('Ajustes guardados');
+  });
+  $('aRegen').addEventListener('click', function () { $('aj').close(); regenerate(); });
+  async function regenerate() {
+    if (!dir) return;
+    var pd, ok = 0, fail = [];
+    try { pd = await dir.getDirectoryHandle('posts'); } catch (e) { toast('No encuentro la carpeta posts'); return; }
+    for (var i = 0; i < blogData.entradas.length; i++) {
+      var e = blogData.entradas[i];
+      try {
+        var p = fromHtml(await readFile(pd, e.slug + '.html'));
+        await writeFile(pd, e.slug + '.html', P.post({ id: e.id, slug: e.slug, titulo: e.titulo, subtitulo: e.subtitulo, portada: e.portada, autor: blogData.blog.autor, fecha: e.fecha, html: p.html }, blogData.blog));
+        ok++;
+      } catch (err) { fail.push(e.slug); }
+    }
+    try { await writeBlogFiles(); } catch (err) { /* se avisa abajo */ }
+    toast(ok + (ok === 1 ? ' página regenerada' : ' páginas regeneradas') + (fail.length ? ' · fallaron: ' + fail.join(', ') : ''), null, null, 6000);
+  }
+
+  // ---------- arranque ----------
+  async function start() {
+    try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) { /* navegador antiguo */ }
+    // primero la entrada (está en el navegador), después la carpeta y posts.json
+    var id = null; try { id = localStorage.getItem(LS_CUR); } catch (e) { /* sin almacenamiento */ }
+    var first = posts[id] || Object.keys(posts).map(function (k) { return posts[k]; }).sort(function (a, b) { return String(b.actualizado).localeCompare(String(a.actualizado)); })[0];
+    openPost(first || newPost());
+    try { if (localStorage.getItem(LS_MODO) === 'md') setMode(true, true); } catch (e) { /* sin almacenamiento */ }
+    renderFolder();
+    if (!first) tTitle.focus();
+    if (canFolder) {
+      try {
+        var h = await idb('readonly', function (st) { return st.get('dir'); });
+        if (h) { if ((await h.queryPermission({ mode: 'readwrite' })) === 'granted') await connect(h, true); else pendingHandle = h; }
+      } catch (e) { /* sin IndexedDB o sin carpeta */ }
+    }
+    if (!dir && location.protocol !== 'file:') {
+      try { blogData = normBlog(JSON.parse(await fetchText('posts.json'))); cacheBlog(); } catch (e) { /* aún no hay posts.json publicado */ }
+    }
+    renderFolder(); renderByline();
+  }
+  start();
+})();
+</script>
+</body>
+</html>
