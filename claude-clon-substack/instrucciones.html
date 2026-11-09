@@ -135,6 +135,7 @@ footer a{color:var(--muted)}
       <li><a href="#escribir">Escribir una entrada</a></li>
       <li><a href="#atajos">Atajos de teclado</a></li>
       <li><a href="#imagenes">Imágenes y vídeos</a></li>
+      <li><a href="#codigo">Código y HTML</a></li>
       <li><a href="#guardar">Dónde se guarda lo que escribes</a></li>
       <li><a href="#publicar">Publicar</a></li>
       <li><a href="#entradas">Gestionar las entradas</a></li>
@@ -184,7 +185,7 @@ footer a{color:var(--muted)}
     <div class="tbl"><table>
       <thead><tr><th>Botón</th><th>Qué hace</th></tr></thead>
       <tbody>
-        <tr><td>Párrafo / Títulos</td><td>Convierte el párrafo en título grande, medio o pequeño, o en un <strong>bloque de código</strong>.</td></tr>
+        <tr><td>Párrafo / Títulos</td><td>Convierte el párrafo en título grande, medio o pequeño, o en un <strong>bloque de código</strong>. Dentro de un bloque de código aparece al lado un selector para elegir el <strong>lenguaje</strong> (ver <a href="#codigo">Código y HTML</a>).</td></tr>
         <tr><td><b>B</b> · <i>I</i> · <s>S</s></td><td>Negrita, cursiva y tachado.</td></tr>
         <tr><td>&lt;/&gt;</td><td>Marca como código el texto seleccionado. Pulsándolo otra vez se quita.</td></tr>
         <tr><td>Enlace</td><td>Añade un enlace al texto seleccionado, o edita o quita el enlace donde está el cursor. Si escribes <code>ejemplo.com</code>, se completa a <code>https://ejemplo.com</code>.</td></tr>
@@ -192,6 +193,7 @@ footer a{color:var(--muted)}
         <tr><td>Listas</td><td>Lista con viñetas o numerada. <kbd>Intro</kbd> en un elemento vacío sale de la lista.</td></tr>
         <tr><td>• • •</td><td>Separador entre secciones (sale como <code>* * *</code>).</td></tr>
         <tr><td>Imagen · Vídeo</td><td>Ver <a href="#imagenes">Imágenes y vídeos</a>.</td></tr>
+        <tr><td>Bloque HTML</td><td>Corta el texto donde está el cursor y mete en medio un <a href="#bloques">bloque HTML</a> (por ejemplo, un artefacto creado con Claude).</td></tr>
         <tr><td>Deshacer · Rehacer</td><td>También con <kbd>Ctrl</kbd>+<kbd>Z</kbd> y <kbd>Ctrl</kbd>+<kbd>Y</kbd>.</td></tr>
       </tbody>
     </table></div>
@@ -204,14 +206,31 @@ footer a{color:var(--muted)}
       <li>Dentro de un bloque de código, lo que pegas entra tal cual, sin formato.</li>
     </ul>
 
+    <h3 id="bloques">Bloques: Texto, Markdown y HTML</h3>
+    <p>Una entrada es una <strong>sucesión de bloques</strong>, y cada uno puede ser de un tipo distinto. Se combinan en el orden que quieras: un párrafo con formato, una sección escrita en Markdown, un artefacto HTML, más texto…</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Tipo</th><th>Cómo se escribe</th></tr></thead>
+      <tbody>
+        <tr><td>Texto</td><td>Con formato, como en un procesador de textos, usando la barra de formato.</td></tr>
+        <tr><td>Markdown</td><td>Se ve ya convertido. Al pulsarlo aparece el texto en Markdown para editarlo, y al salir del bloque se vuelve a ver el resultado.</td></tr>
+        <tr><td>HTML</td><td>Código HTML que se ve funcionando en un marco aislado. Se cambia con <strong>Editar código</strong>. Ver <a href="#codigo">Código y HTML</a>.</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>El selector <strong>Bloque: Texto · Markdown · HTML</strong>, encima de la barra de formato, indica el tipo del bloque en el que estás. Pulsando otro tipo, <strong>el bloque se convierte</strong>. <kbd>Ctrl</kbd>+<kbd>M</kbd> alterna entre Texto y Markdown. Al convertir un bloque HTML en otro tipo se pierden sus estilos y scripts, y el editor pide confirmación.</li>
+      <li>Al pasar el ratón por un bloque aparecen sus controles: <strong>↑ ↓</strong> para moverlo y <strong>✕</strong> para borrarlo. Debajo aparece <strong>Añadir bloque: + Texto · + Markdown · + HTML</strong>, que añade un bloque nuevo justo detrás. Tras el último bloque estos botones se ven siempre.</li>
+      <li>La barra de formato solo funciona en los bloques de Texto; en los demás aparece apagada.</li>
+      <li>Dos bloques de Texto seguidos se unen en uno al volver a abrir la entrada; el resultado es el mismo.</li>
+    </ul>
+
     <h3>Escribir en Markdown</h3>
-    <p>El botón <strong>Markdown</strong>, al final de la barra de formato (o <kbd>Ctrl</kbd>+<kbd>M</kbd>), cambia el editor visual por un área de texto donde escribes en Markdown. Al volver a pulsarlo, el texto se convierte y ves el resultado. Puedes cambiar de modo cuando quieras: la entrada es la misma y se guarda igual en los dos. El editor recuerda el último modo que usaste.</p>
+    <p>Esto es lo que admite un bloque Markdown:</p>
     <div class="tbl"><table>
       <thead><tr><th>Markdown</th><th>Resultado</th></tr></thead>
       <tbody>
         <tr><td><code>## Título</code></td><td>Título grande (<code>###</code> medio, <code>####</code> pequeño)</td></tr>
         <tr><td><code>**negrita**</code> · <code>*cursiva*</code> · <code>~~tachado~~</code></td><td>Formato del texto</td></tr>
-        <tr><td><code>`código`</code> y bloques entre <code>```</code></td><td>Código</td></tr>
+        <tr><td><code>`código`</code> y bloques entre <code>```</code></td><td>Código. Pon el lenguaje tras las comillas: <code>```javascript</code>, <code>```css</code>, <code>```python</code>…</td></tr>
         <tr><td><code>[texto](https://…)</code></td><td>Enlace</td></tr>
         <tr><td><code>- elemento</code> · <code>1. elemento</code></td><td>Listas (sangra 3 espacios para anidar)</td></tr>
         <tr><td><code>&gt; texto</code></td><td>Cita</td></tr>
@@ -223,8 +242,8 @@ footer a{color:var(--muted)}
     </table></div>
     <ul>
       <li>Las imágenes que pegas o sueltas aparecen como <code>pegada:1</code>, <code>pegada:2</code>… para no llenar el texto de datos; al publicar se usa la imagen real.</li>
-      <li>Al pasar a Markdown se descarta lo que el editor no admite (tablas, colores…), igual que al pegar.</li>
-      <li>El conversor de Markdown se carga de internet al abrir el editor: sin conexión, el botón avisa y te quedas en el editor visual.</li>
+      <li>Al convertir un bloque a Markdown se descarta lo que el editor no admite (tablas, colores…), igual que al pegar.</li>
+      <li>El conversor de Markdown se carga de internet al abrir el editor. Sin conexión no se pueden crear bloques Markdown nuevos, y los que ya existen se ven como texto sin convertir.</li>
     </ul>
   </section>
 
@@ -273,6 +292,22 @@ footer a{color:var(--muted)}
     <div class="note"><p>Conecta la carpeta <strong>antes</strong> de añadir imágenes. Las que se añadieron sin carpeta se quedan incrustadas aunque la conectes después.</p></div>
     <h3>Vídeos</h3>
     <p>De momento solo se admiten vídeos de <strong>YouTube</strong>. Usa el botón <strong>Vídeo</strong> o pega el enlace en una línea vacía. En el editor verás la miniatura; en la entrada publicada, el reproductor (con <code>youtube-nocookie.com</code>, que no pone cookies hasta que se pulsa reproducir).</p>
+  </section>
+
+  <section id="codigo">
+    <h2>Código y HTML</h2>
+    <h3>Bloques de código</h3>
+    <p>Crea un bloque con <strong>Bloque de código</strong> en el selector de estilo o escribiendo <code>```</code> y un espacio al principio de un párrafo. Con el cursor dentro, elige el <strong>lenguaje</strong> en el selector que aparece al lado. <kbd>Tab</kbd> añade sangría.</p>
+    <p>En la entrada publicada, los colores del código se añaden con <strong>highlight.js</strong>, que se adaptan al modo claro y oscuro. Cada bloque lleva una cabecera con el nombre del lenguaje y un botón <strong>Copiar</strong>. Con el lenguaje en <em>Automático</em> se intenta adivinar, pero si el fragmento es corto puede quedarse sin colores. Elegir el lenguaje es más seguro.</p>
+    <h3>Bloques HTML (artefactos de Claude)</h3>
+    <p>Para crear uno, usa <strong>+ HTML</strong> en «Añadir bloque», o el botón <strong>Bloque HTML</strong> de la barra, que corta el texto donde está el cursor. Se abre un cuadro donde pegas el código: una página completa (como un artefacto de Claude) o un fragmento. En el editor ves cómo queda; con <strong>Editar código</strong> lo cambias y con <strong>✕</strong> lo borras.</p>
+    <ul>
+      <li>Se muestra dentro de un <strong>marco aislado</strong>: sus estilos y scripts funcionan, pero no afectan al resto de la página ni pueden leer nada del blog.</li>
+      <li>La altura se ajusta sola al contenido. Si el contenido ocupa toda la pantalla (usa <code>100vh</code>) o la altura no queda bien, pon una <strong>altura fija</strong>.</li>
+      <li><strong>Usar todo el ancho</strong> lo saca de la columna de texto, hasta 1100 px. Viene bien para juegos, gráficos o tableros.</li>
+      <li>Dentro del marco <strong>no funciona <code>localStorage</code></strong>. Si un artefacto guarda datos así, dará error o no recordará nada.</li>
+      <li>Las librerías que el HTML cargue de internet (CDN) funcionan con normalidad.</li>
+    </ul>
   </section>
 
   <section id="guardar">
