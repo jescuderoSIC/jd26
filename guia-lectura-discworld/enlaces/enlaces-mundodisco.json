@@ -1,0 +1,101 @@
+{
+  "titulo": "Enlaces de Mundodisco",
+  "enlaces": [
+    {
+      "url": "https://www.terrypratchett.com/",
+      "titulo": "Terry Pratchett — web oficial",
+      "descripcion": "Página oficial del autor: noticias, libros y adaptaciones.",
+      "imagen": "",
+      "sitio": "terrypratchett.com",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=terrypratchett.com",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Oficial",
+      "nota": ""
+    },
+    {
+      "url": "https://wiki.lspace.org/",
+      "titulo": "Discworld & Terry Pratchett Wiki (L-Space)",
+      "descripcion": "La enciclopedia de los fans: personajes, lugares, libros y anotaciones.",
+      "imagen": "",
+      "sitio": "wiki.lspace.org",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=wiki.lspace.org",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Wikis y referencia",
+      "nota": ""
+    },
+    {
+      "url": "https://discworld.fandom.com/wiki/Discworld_Wiki",
+      "titulo": "Discworld Wiki (Fandom)",
+      "descripcion": "Otra wiki de fans, con fichas de personajes y lugares.",
+      "imagen": "",
+      "sitio": "discworld.fandom.com",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=discworld.fandom.com",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Wikis y referencia",
+      "nota": ""
+    },
+    {
+      "url": "https://es.wikipedia.org/wiki/Mundodisco",
+      "titulo": "Mundodisco — Wikipedia",
+      "descripcion": "Artículo en español sobre la serie: historia, sagas y lista de libros.",
+      "imagen": "",
+      "sitio": "es.wikipedia.org",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=es.wikipedia.org",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Wikis y referencia",
+      "nota": ""
+    },
+    {
+      "url": "https://www.lspace.org/",
+      "titulo": "The L-Space Web",
+      "descripcion": "Veterano sitio de fans: anotaciones (APF), citas y preguntas frecuentes.",
+      "imagen": "",
+      "sitio": "lspace.org",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=lspace.org",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Wikis y referencia",
+      "nota": ""
+    },
+    {
+      "url": "https://www.paulkidby.com/",
+      "titulo": "Paul Kidby",
+      "descripcion": "El ilustrador de las portadas y del aspecto «oficial» de los personajes.",
+      "imagen": "",
+      "sitio": "paulkidby.com",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=paulkidby.com",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Arte y tiendas",
+      "nota": ""
+    },
+    {
+      "url": "https://www.discworldemporium.com/",
+      "titulo": "Discworld Emporium",
+      "descripcion": "Tienda de objetos de Mundodisco: sellos, mapas, libros y curiosidades.",
+      "imagen": "",
+      "sitio": "discworldemporium.com",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=discworldemporium.com",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Arte y tiendas",
+      "nota": ""
+    },
+    {
+      "url": "http://www.gnuterrypratchett.com/",
+      "titulo": "GNU Terry Pratchett",
+      "descripcion": "El homenaje que mantiene su nombre circulando por internet en una cabecera HTTP.",
+      "imagen": "",
+      "sitio": "gnuterrypratchett.com",
+      "icono": "https://www.google.com/s2/favicons?sz=64&domain=gnuterrypratchett.com",
+      "autor": "",
+      "fecha": "2026-11-10T12:00:00+01:00",
+      "categoria": "Homenaje",
+      "nota": "Inspirado en los clacks de «Cartas en el asunto»."
+    }
+  ]
+}

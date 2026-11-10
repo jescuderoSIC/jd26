@@ -1,0 +1,47 @@
+/* ===== Guía de lectura: mapa SVG de sellos =====
+   Requiere css/mundodisco.css antes. */
+
+/* ---------- Mapa SVG ---------- */
+.pergamino { fill: var(--pergamino); stroke: var(--pergamino-borde); stroke-width: 3; }
+
+.lineas path { fill: none; stroke: #B23A2B; stroke-width: 5; stroke-linecap: round; transition: opacity .2s, stroke-width .2s; }
+.l-directa { stroke: #B23A2B; stroke-width: 5; }
+.l-menor { stroke: #B23A2B; stroke-width: 5; stroke-dasharray: 1 10; stroke-linecap: round; }
+.leyenda-lineas line { stroke-width: 4; }
+
+.rotulo-saga text {
+    font-family: "Uncial Antiqua", serif;
+    font-size: 30px;
+    fill: #7E2418;
+}
+.flecha-saga { stroke: #B23A2B; stroke-width: 4; fill: none; }
+.rotulo { font-family: "Uncial Antiqua", serif; font-size: 26px; fill: #3b2410; letter-spacing: 2px; }
+.rotulo.pequeno { font-size: 18px; fill: #7E2418; letter-spacing: 0; }
+.rotulo-saga, .rotulo { transition: opacity .2s; }
+
+.nodo { cursor: pointer; outline: none; transition: opacity .2s; }
+.nodo .cuerpo { transition: transform .18s ease; transform-box: fill-box; transform-origin: center; }
+.nodo:hover .cuerpo, .nodo:focus-visible .cuerpo { transform: scale(1.1); }
+.sello { stroke: #5a3a1c; stroke-width: 3; }
+.anillo { fill: none; stroke: rgba(90, 58, 28, .35); stroke-width: 2; }
+.brillo { pointer-events: none; }
+.titulo-nodo { fill: #2E1B0E; font-family: "EB Garamond", Georgia, serif; font-weight: 600; pointer-events: none; }
+.tipo-ciencia .titulo-nodo { fill: #FFF6E6; }
+.tipo-juvenil .titulo-nodo { fill: #1E0E18; }
+
+.nodo:focus-visible .sello { stroke: #1d4ed8; stroke-width: 5; }
+.nodo.seleccionado .sello { stroke: #2E1B0E; stroke-width: 6; }
+.nodo.seleccionado .cuerpo { transform: scale(1.12); }
+
+.marca-leido { display: none; pointer-events: none; }
+.marca-leido circle { fill: #2F6B3A; stroke: #F1E3C2; stroke-width: 3; }
+.marca-leido text { fill: #fff; font-size: 17px; font-weight: bold; }
+.nodo.leido .marca-leido { display: inline; }
+
+/* Al pasar o seleccionar: se resaltan el libro, sus vecinos y sus líneas */
+#mapa.enfocando .nodo:not(.foco):not(.vecino) { opacity: .4; }
+#mapa.enfocando .lineas path:not(.activa) { opacity: .25; }
+.lineas path.activa { stroke-width: 7; }
+.apagado { opacity: .15 !important; }
+.nodo.apagado { pointer-events: none; }
+

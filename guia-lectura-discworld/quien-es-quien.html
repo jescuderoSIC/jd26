@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quién es quién en el Mundodisco</title>
+    <meta name="description" content="Los personajes del Mundodisco por orden de importancia, en toda la serie y en cada libro, con una breve biografía.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/quien.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Quién es quién en el <span>Mundodisco</span></h1>
+        <p class="subtitulo">Magos, brujas, policías, estafadores y la Muerte. Pulsa un retrato para leer su biografía.</p>
+    </header>
+
+    <section class="herramientas herramientas-pj" aria-label="Filtros">
+        <input type="search" id="buscador" placeholder="Buscar personaje…" aria-label="Buscar personaje">
+        <label class="sel-libro">
+            <span>Personajes de un libro:</span>
+            <select id="sel-libro">
+                <option value="">Todos, por importancia en la serie</option>
+            </select>
+        </label>
+        <div class="filtro" role="group" aria-label="Filtrar por importancia" id="filtro-nivel"></div>
+        <p class="resumen-libro" id="resumen-libro" hidden></p>
+    </section>
+
+    <main class="rejilla-pj" id="rejilla"></main>
+
+    <dialog class="ficha-pj" id="ficha-pj" aria-labelledby="fp-nombre">
+        <div class="fp-cuerpo">
+            <button type="button" class="cerrar" id="fp-cerrar" aria-label="Cerrar">×</button>
+            <div class="fp-retrato" id="fp-retrato"></div>
+            <div class="fp-texto">
+                <p class="fp-saga" id="fp-saga"></p>
+                <h2 id="fp-nombre"></h2>
+                <p class="fp-original" id="fp-original"></p>
+                <p class="fp-bio" id="fp-bio"></p>
+            </div>
+            <div class="fp-libros" id="fp-libros"></div>
+            <div class="ficha-nav fp-nav">
+                <button type="button" id="fp-anterior">← <span></span></button>
+                <button type="button" id="fp-siguiente"><span></span> →</button>
+            </div>
+        </div>
+    </dialog>
+
+    <footer class="pie">
+        <p>Retratos dibujados como sellos heráldicos con el emblema de cada personaje; se pueden sustituir por imágenes propias
+        (campo <code>imagen</code> en <code>js/personajes.js</code>). Biografías propias, sin destripar finales.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/historia.js"></script>
+    <script src="js/personajes.js"></script>
+    <script src="js/quien.js"></script>
+</body>
+</html>

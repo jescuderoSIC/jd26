@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glosario del Mundodisco</title>
+    <meta name="description" content="Las palabras del Mundodisco explicadas: octarina, cabezología, clacks, Espacio-B, narrativium y mucho más.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/glosario.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Glosario del <span>Mundodisco</span></h1>
+        <p class="subtitulo">Las palabras que Pratchett usa sin explicar: de la octarina a la cabezología.</p>
+    </header>
+
+    <section class="herramientas herramientas-glosario" aria-label="Filtros">
+        <input type="search" id="buscador" placeholder="Buscar término o definición…" aria-label="Buscar en el glosario">
+        <button type="button" class="azar" id="azar">✦ Un término al azar</button>
+        <div class="filtro" role="group" aria-label="Filtrar por categoría" id="filtro-cat"></div>
+        <nav class="abecedario" id="abecedario" aria-label="Índice alfabético"></nav>
+        <p class="recuento" id="recuento" aria-live="polite"></p>
+    </section>
+
+    <main class="glosario" id="glosario"></main>
+
+    <footer class="pie">
+        <p>Definiciones propias. Entre paréntesis, el término original en inglés. Los libros enlazan con la
+        <a href="guia-de-lectura-de-mundodisco.html">guía de lectura</a>; «Ver también» lleva al resto de páginas.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/historia.js"></script>
+    <script src="js/glosario.js"></script>
+    <script src="js/glosario-vista.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo lo que sabemos de Mundodisco</title>
+    <meta name="description" content="Documento sobre el Mundodisco: el autor, el mundo, las sagas, los personajes y los temas de la serie.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/documento.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <div class="doc-disposicion">
+        <!-- El texto sale de este .md: es el mismo fichero que se pasa a NotebookLM -->
+        <article class="documento-md" id="documento" data-md="sabemos-de-mundodisco-conocimiento.md" aria-live="polite">
+            <p class="aviso-doc">Cargando…</p>
+        </article>
+
+        <aside class="indice-doc" id="indice-doc" hidden>
+            <h2>Contenido</h2>
+            <ol id="lista-indice"></ol>
+            <p class="descarga"><a href="sabemos-de-mundodisco-conocimiento.md" download>Descargar el .md</a> (para NotebookLM)</p>
+        </aside>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <script src="js/documento.js"></script>
+</body>
+</html>

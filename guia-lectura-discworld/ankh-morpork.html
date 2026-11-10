@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ankh-Morpork</title>
+    <meta name="description" content="Plano interactivo de Ankh-Morpork: barrios, gremios y lugares emblemáticos de la gran ciudad del Mundodisco.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/mapa.css">
+</head>
+<body class="pagina-ciudad">
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>La ciudad de <span>Ankh-Morpork</span></h1>
+        <p class="subtitulo">Un millón de habitantes, un río sobre el que se puede caminar y un tirano que hace que todo funcione. Pulsa un barrio o un edificio.</p>
+    </header>
+
+    <section class="herramientas" aria-label="Filtros">
+        <input type="search" id="buscador" placeholder="Buscar barrio, gremio, edificio…" aria-label="Buscar lugar">
+        <div class="filtro" role="group" aria-label="Filtrar por categoría" id="filtro-zonas"></div>
+        <div class="filtro leyenda" role="group" aria-label="Filtrar por tipo" id="filtro-tipos"></div>
+    </section>
+
+    <main class="disposicion">
+        <div class="visor-marco">
+            <div class="visor visor-ciudad" id="visor" aria-label="Plano de Ankh-Morpork. Arrastra para moverte y usa la rueda o pellizca para acercar.">
+                <div class="plano" id="plano">
+                    <img src="images/AM_Map_Barrios_web.jpg" alt="Plano ilustrado de Ankh-Morpork, con el río Ankh atravesando la ciudad y los barrios en colores" width="1000" height="1000" draggable="false">
+                    <div class="marcadores" id="marcadores"></div>
+                </div>
+            </div>
+            <div class="controles-zoom" role="group" aria-label="Zoom">
+                <button type="button" id="acercar" aria-label="Acercar">+</button>
+                <button type="button" id="alejar" aria-label="Alejar">−</button>
+                <button type="button" id="encuadrar" aria-label="Ver la ciudad entera">⤢</button>
+            </div>
+            <div class="opciones-mapa">
+                <label><input type="checkbox" id="ver-nombres"> Mostrar nombres de los edificios</label>
+                <span class="pista-mapa">Arrastra para moverte · rueda o pellizco para acercar</span>
+            </div>
+        </div>
+
+        <aside class="ficha" id="ficha" aria-live="polite" tabindex="-1">
+            <div class="ficha-vacia" id="ficha-vacia">
+                <p class="sello-grande" aria-hidden="true">✦</p>
+                <p>Elige un barrio o un edificio del plano o de la lista.</p>
+                <p class="pista">El plano es ilustrativo: no es el mapa oficial de la serie, así que la situación de cada lugar es orientativa.</p>
+            </div>
+            <article id="ficha-lugar" hidden>
+                <button type="button" class="cerrar" id="cerrar" aria-label="Cerrar ficha">×</button>
+                <p class="ficha-saga" id="ficha-zona"></p>
+                <h2 id="ficha-nombre"></h2>
+                <p class="ficha-es" id="ficha-es"></p>
+                <p class="ficha-datos">
+                    <span class="insignia" id="ficha-tipo"></span>
+                    <span id="ficha-posicion"></span>
+                </p>
+                <p class="ficha-resumen" id="ficha-texto"></p>
+                <p class="aviso-aprox" id="ficha-aprox" hidden></p>
+                <div class="ficha-relacion" id="ficha-libros">
+                    <h3>Aparece en</h3>
+                    <ul id="lista-libros"></ul>
+                </div>
+            </article>
+        </aside>
+    </main>
+
+    <section class="entender" aria-labelledby="titulo-entender">
+        <h2 id="titulo-entender">Cómo funciona Ankh-Morpork</h2>
+        <div class="tarjetas tarjetas-ciudad">
+            <article class="tarjeta">
+                <h3>Dos ciudades en una</h3>
+                <p><strong>Ankh</strong> es la orilla rica y respetable; <strong>Morpork</strong>, la pobre y peligrosa. Entre ambas corre el <strong>río Ankh</strong>, tan espeso que se puede caminar sobre él. Juntas suman cerca de un millón de habitantes de todas las especies.</p>
+            </article>
+            <article class="tarjeta">
+                <h3>Un tirano que funciona</h3>
+                <p>La gobierna <strong>Lord Vetinari</strong>, el Patricio. Su principio es simple: la ciudad tiene que funcionar. Lo consigue haciendo que todos los grupos poderosos necesiten que siga funcionando. Un hombre, un voto: el hombre es Vetinari y él tiene el voto.</p>
+            </article>
+            <article class="tarjeta">
+                <h3>Los gremios</h3>
+                <p>Casi todo está organizado en gremios, incluso el crimen. Los <strong>ladrones</strong> roban con licencia y dentro de una cuota; los <strong>asesinos</strong> son una escuela de élite con código de honor; hay gremios de mendigos, bufones, alquimistas, abogados, músicos y «costureras».</p>
+            </article>
+            <article class="tarjeta">
+                <h3>La Guardia</h3>
+                <p>De tres hombres desacreditados a un cuerpo de policía moderno y multiespecie, con enanos, trolls, una mujer lobo, un gólem, un zombi y un vampiro. Su comandante, <strong>Sam Vimes</strong>, es la conciencia de la ciudad.</p>
+            </article>
+            <article class="tarjeta">
+                <h3>Una ciudad que cambia</h3>
+                <p>De ciudad medieval de fantasía a metrópoli con periódico, telégrafo de semáforos, correo, papel moneda, fútbol y ferrocarril. Ankh-Morpork vive su propia revolución industrial libro a libro.</p>
+            </article>
+            <article class="tarjeta">
+                <h3>Inspiración</h3>
+                <p>Su modelo es sobre todo Londres, en distintas épocas, de la Edad Media a la Inglaterra victoriana. Muchos nombres de calles y lugares son juegos de palabras con el Londres real, como Hide Park.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="listado" aria-labelledby="titulo-listado">
+        <h2 id="titulo-listado">Barrios y lugares</h2>
+        <div class="sagas" id="listado"></div>
+    </section>
+
+    <footer class="pie">
+        <p>Plano base: <a href="images/AM_Map_Barrios_web.jpg">AM_Map_Barrios_web.jpg</a> (ilustrativo, no es el plano oficial). Descripciones propias.
+        Los libros enlazan con la <a href="guia-de-lectura-de-mundodisco.html">guía de lectura</a>; el resto del disco, en el <a href="mapa-lugares-de-mundodisco.html">mapa de lugares</a>.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/ankh-morpork.js"></script>
+    <script src="js/mapa.js" data-datos="ANKH_MORPORK"></script>
+</body>
+</html>

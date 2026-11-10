@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guía de lectura de Mundodisco</title>
+    <meta name="description" content="Versión interactiva de la Discworld Reading Order Guide 3.0, con un resumen de cada libro.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/guia.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Guía de lectura de <span>Mundodisco</span></h1>
+        <p class="subtitulo">En memoria de Terry Pratchett (1948–2015). Pulsa un libro para leer su resumen.</p>
+    </header>
+
+    <section class="herramientas" aria-label="Filtros">
+        <input type="search" id="buscador" placeholder="Buscar libro o personaje…" aria-label="Buscar libro">
+        <div class="filtro" role="group" aria-label="Resaltar saga" id="filtro-sagas"></div>
+        <div class="filtro leyenda" role="group" aria-label="Filtrar por tipo de libro" id="filtro-tipos"></div>
+        <p class="progreso" id="progreso" aria-live="polite"></p>
+    </section>
+
+    <main class="disposicion">
+        <div class="lienzo" id="lienzo">
+            <svg id="mapa" viewBox="40 440 1620 1270" role="group" aria-label="Mapa de lectura de Mundodisco"></svg>
+            <p class="leyenda-lineas">
+                <span><svg width="40" height="10" aria-hidden="true"><line x1="0" y1="5" x2="40" y2="5" class="l-directa"/></svg> conexión directa</span>
+                <span><svg width="40" height="10" aria-hidden="true"><line x1="0" y1="5" x2="40" y2="5" class="l-menor"/></svg> conexión menor</span>
+                <span><span class="check-muestra">✓</span> leído</span>
+            </p>
+        </div>
+
+        <aside class="ficha" id="ficha" aria-live="polite" tabindex="-1">
+            <div class="ficha-vacia" id="ficha-vacia">
+                <p class="sello-grande" aria-hidden="true">✦</p>
+                <p>Elige un libro del mapa o de la lista para ver su resumen.</p>
+                <p class="pista">Consejo: las novelas <strong>doradas</strong> son buenos puntos de partida para cada saga.</p>
+            </div>
+            <article id="ficha-libro" hidden>
+                <button type="button" class="cerrar" id="cerrar" aria-label="Cerrar ficha">×</button>
+                <p class="ficha-saga" id="ficha-saga"></p>
+                <h2 id="ficha-titulo"></h2>
+                <p class="ficha-es" id="ficha-es"></p>
+                <p class="ficha-datos">
+                    <span class="insignia" id="ficha-tipo"></span>
+                    <span id="ficha-anio"></span>
+                </p>
+                <p class="ficha-resumen" id="ficha-resumen"></p>
+                <p class="ficha-pj-enlace"><a id="ficha-personajes" href="quien-es-quien.html">Ver sus personajes →</a></p>
+                <label class="leido">
+                    <input type="checkbox" id="ficha-leido"> Ya lo he leído
+                </label>
+                <div class="ficha-nav">
+                    <button type="button" id="anterior">← <span></span></button>
+                    <button type="button" id="siguiente"><span></span> →</button>
+                </div>
+                <div class="ficha-relacion" id="ficha-relacion">
+                    <h3>Conectado con</h3>
+                    <ul id="ficha-conexiones"></ul>
+                </div>
+            </article>
+        </aside>
+    </main>
+
+    <section class="listado" aria-labelledby="titulo-listado">
+        <h2 id="titulo-listado">Orden de lectura por sagas</h2>
+        <div class="sagas" id="listado"></div>
+    </section>
+
+    <footer class="pie">
+        <p>Basada en la <em>Discworld Reading Order Guide 3.0</em>: guía original de Krzysztof K. Kietzman,
+        actualizada por Andrés Peña y Emmanuel Varet, diseño gráfico de Jakub Oleksów. Resúmenes propios.
+        <a href="images/Discworld_Reading_Order_Guide_3.0.jpg">Ver la imagen original</a>.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/guia.js"></script>
+</body>
+</html>

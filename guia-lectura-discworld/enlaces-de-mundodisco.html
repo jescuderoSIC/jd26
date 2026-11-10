@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Enlaces de Mundodisco</title>
+    <meta name="description" content="Colección de enlaces sobre el Mundodisco, como tarjetas con imagen, título y descripción, ordenadas por categorías.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/enlaces.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Enlaces de <span>Mundodisco</span></h1>
+        <p class="subtitulo">Wikis, tiendas, arte y todo lo que quieras tener a mano, agrupado por categorías.<br>
+        Se guardan en el archivo <b>enlaces/enlaces-mundodisco.json</b> de esta carpeta.</p>
+    </header>
+
+    <main class="app">
+        <form class="adder" id="adder" autocomplete="off">
+            <input type="text" inputmode="url" id="urlIn" placeholder="Pega aquí un enlace (o Ctrl+V en cualquier parte de la página)" aria-label="Enlace para guardar" spellcheck="false">
+            <button class="go" type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Guardar
+            </button>
+        </form>
+        <p class="hint" id="hint" hidden></p>
+
+        <div class="store" id="store">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+            <span class="msg" id="storeMsg">Cargando…</span>
+            <button class="sbtn" type="button" id="connectBtn" hidden>Conectar carpeta</button>
+            <button class="sbtn" type="button" id="downloadBtn" hidden>Descargar JSON</button>
+        </div>
+
+        <div class="bar">
+            <div class="filtro tabs" id="tabs" role="group" aria-label="Categorías"></div>
+            <input type="search" class="search" id="q" placeholder="Buscar…" aria-label="Buscar en los enlaces">
+        </div>
+
+        <div id="list"><p class="empty">Cargando enlaces…</p></div>
+    </main>
+
+    <footer class="pie">
+        <p>Los datos de cada enlace se piden a microlink.io (o a YouTube para sus vídeos). Lo que guardas queda en tus archivos y en tu navegador.</p>
+    </footer>
+
+    <dialog id="dlg">
+        <form method="dialog" id="dlgForm">
+            <h3>Editar enlace</h3>
+            <label>Título<input id="fTitle" required></label>
+            <label>Categoría<input id="fCat" list="catList" placeholder="Por ejemplo: Wikis, Arte, Audiolibros…"></label>
+            <datalist id="catList"></datalist>
+            <label>Descripción<textarea id="fDesc" rows="3"></textarea></label>
+            <label>Imagen (dirección)<input id="fImg" type="url" placeholder="https://…"></label>
+            <label>Nota personal<textarea id="fNote" rows="2" placeholder="Para qué sirve, cuándo usarlo…"></textarea></label>
+            <label>Enlace<input id="fUrl" type="url" required></label>
+            <div class="row">
+                <button class="sbtn left" type="button" id="fRefetch">Volver a leer los datos</button>
+                <button class="sbtn" value="cancel" formnovalidate>Cancelar</button>
+                <button class="go" value="ok" id="fOk">Guardar</button>
+            </div>
+        </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="toastBtn" hidden></button></div>
+    <div class="veil" id="veil"><span>Suelta el enlace para guardarlo</span></div>
+
+    <script src="js/enlaces.js"></script>
+</body>
+</html>

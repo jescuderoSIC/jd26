@@ -1,0 +1,192 @@
+/* ===== Enlaces de Mundodisco =====
+   Requiere css/mundodisco.css antes. Las pestañas de categoría usan .filtro (estilo común). */
+
+:root {
+    --ok: #2F6B3A;
+    --ok-suave: rgba(47, 107, 58, .14);
+    --aviso: #A86A12;
+    --aviso-suave: rgba(168, 106, 18, .14);
+    --tinte: rgba(178, 58, 43, .10);
+    --miniatura: #E4D3AE;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --ok: #7BC98A; --ok-suave: rgba(123, 201, 138, .14);
+        --aviso: #F0B85A; --aviso-suave: rgba(240, 184, 90, .14);
+        --tinte: rgba(224, 106, 85, .16); --miniatura: #3A2C21;
+    }
+}
+:root[data-theme="dark"] {
+    --ok: #7BC98A; --ok-suave: rgba(123, 201, 138, .14);
+    --aviso: #F0B85A; --aviso-suave: rgba(240, 184, 90, .14);
+    --tinte: rgba(224, 106, 85, .16); --miniatura: #3A2C21;
+}
+
+.subtitulo b { font-style: normal; font-weight: 600; color: var(--tinta); }
+
+.app { max-width: 920px; margin: 16px auto 0; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+
+/* ---------- Añadir ---------- */
+.adder {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px;
+    background: var(--papel); border: 1px solid var(--borde); border-radius: 999px; padding: 6px;
+    box-shadow: 0 6px 20px var(--sombra);
+}
+.adder:focus-within { border-color: var(--rojo); }
+.adder input { border: 0; background: transparent; padding: 8px 14px; min-width: 0; font-size: 18px; }
+.adder input:focus { outline: none; }
+.go {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: 0; border-radius: 999px; padding: 8px 18px; cursor: pointer; white-space: nowrap;
+    background: var(--rojo); color: #FFF8EC; font-size: 17px; font-weight: 600;
+}
+.go:hover { filter: brightness(1.08); }
+.go:active { transform: scale(.98); }
+.go svg { width: 17px; height: 17px; }
+.hint { margin: -6px 0 0; padding: 0 18px; font-size: 15px; color: var(--tinta-suave); }
+.hint b { color: var(--tinta); }
+
+/* ---------- Estado de la carpeta ---------- */
+.store {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px;
+    background: var(--papel); border: 1px solid var(--borde); border-radius: 16px; padding: 10px 14px; font-size: 16px;
+}
+.store .ico { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--tinte); color: var(--rojo); flex: none; }
+.store .ico svg { width: 17px; height: 17px; }
+.store .msg { flex: 1 1 220px; min-width: 0; line-height: 1.4; color: var(--tinta-suave); }
+.store .msg b { color: var(--tinta); font-weight: 600; }
+.store.ok .ico { background: var(--ok-suave); color: var(--ok); }
+.store.dirty { border-color: var(--aviso); background: var(--aviso-suave); }
+.store.dirty .ico { background: var(--aviso-suave); color: var(--aviso); }
+.sbtn {
+    border: 1px solid var(--borde); background: transparent; border-radius: 999px;
+    padding: 4px 14px; cursor: pointer; font-size: 16px; white-space: nowrap;
+}
+.sbtn:hover { border-color: var(--rojo); color: var(--rojo); }
+
+/* ---------- Filtros ---------- */
+.bar { display: flex; flex-direction: column; gap: 10px; }
+.tabs { font-variant-numeric: tabular-nums; }
+.search {
+    max-width: 340px; padding: 8px 14px; font-size: 17px;
+    border: 1px solid var(--borde); border-radius: 999px; background: var(--papel);
+}
+.search:focus { outline: 2px solid var(--rojo); outline-offset: 1px; }
+
+/* ---------- Grupos y tarjetas ---------- */
+#list { display: flex; flex-direction: column; gap: 6px; }
+.group { display: flex; flex-direction: column; gap: 10px; }
+.group h2 {
+    margin: 14px 4px 0; display: flex; align-items: baseline; gap: 10px;
+    font-size: 16px; font-weight: 400; color: var(--tinta-suave);
+}
+.group h2 b { font-family: "Uncial Antiqua", serif; font-weight: normal; font-size: 21px; color: var(--rojo); }
+
+.card {
+    position: relative;
+    display: grid; grid-template-columns: clamp(120px, 28%, 220px) minmax(0, 1fr);
+    background: var(--papel); border: 1px solid var(--borde); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 3px 12px var(--sombra);
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.card:hover { border-color: var(--rojo); box-shadow: 0 8px 22px var(--sombra); transform: translateY(-1px); }
+.card.flash { animation: flash 1.6s ease; }
+@keyframes flash { 0%, 40% { box-shadow: 0 0 0 3px var(--rojo); } 100% { box-shadow: 0 3px 12px var(--sombra); } }
+
+.card .thumb { position: relative; display: block; min-height: 120px; background: var(--miniatura); border-right: 1px solid var(--borde); }
+.card .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.card .thumb .noimg {
+    /* sin imagen: un sello de lacre con el icono del sitio */
+    position: absolute; inset: 0; display: grid; place-items: center;
+}
+.card .thumb .noimg::before {
+    content: ""; position: absolute; width: 68px; height: 68px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), transparent 55%), #B23A2B;
+    border: 3px solid #7E2418; box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.card .thumb .noimg img { position: relative; width: 34px; height: 34px; object-fit: contain; border-radius: 8px; background: #FFF8EC; padding: 3px; }
+.card .thumb .play {
+    position: absolute; left: 10px; bottom: 10px; width: 34px; height: 24px; border-radius: 7px;
+    background: rgba(0, 0, 0, .72); color: #fff; display: grid; place-items: center;
+}
+.card .thumb .play svg { width: 13px; height: 13px; }
+
+.card .body { padding: 12px 16px 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card a.title {
+    color: var(--tinta); font-weight: 600; font-size: 20px; line-height: 1.25; text-decoration: none;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card a.title::after { content: ""; position: absolute; inset: 0; z-index: 0; } /* toda la tarjeta abre el enlace */
+.card a.title:hover { color: var(--rojo); }
+.card .desc {
+    margin: 0; color: var(--tinta-suave); font-size: 16px; line-height: 1.45; word-break: break-word;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card .note { margin: 0; font-style: italic; font-size: 16px; line-height: 1.45; border-left: 3px solid var(--rojo); padding-left: 8px; }
+.card .foot { margin-top: auto; display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 14px; color: var(--tinta-suave); }
+.card .foot img { width: 16px; height: 16px; border-radius: 3px; flex: none; }
+.card .site { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card .acts { margin-left: auto; display: flex; gap: 2px; position: relative; z-index: 1; }
+.ibtn {
+    width: 34px; height: 34px; border-radius: 50%; border: 0; background: transparent; cursor: pointer;
+    color: var(--tinta-suave); display: grid; place-items: center;
+}
+.ibtn:hover { background: var(--tinte); color: var(--rojo); }
+.ibtn svg { width: 17px; height: 17px; }
+.card.loading .body > *:not(.foot) { opacity: .5; }
+.card.loading .thumb { animation: pulso 1.2s ease-in-out infinite; }
+@keyframes pulso { 50% { opacity: .55; } }
+
+.empty { text-align: center; color: var(--tinta-suave); padding: 40px 16px; line-height: 1.6; }
+
+/* ---------- Diálogo de edición ---------- */
+dialog {
+    border: 1px solid var(--borde); border-radius: 18px; padding: 0;
+    background: var(--papel); color: var(--tinta);
+    width: min(560px, calc(100vw - 32px)); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .6);
+}
+dialog::backdrop { background: rgba(30, 18, 8, .55); }
+dialog form { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+dialog h3 { margin: 0; font-family: "Uncial Antiqua", serif; font-weight: normal; font-size: 22px; color: var(--rojo); }
+dialog label { display: flex; flex-direction: column; gap: 4px; font-size: 15px; color: var(--tinta-suave); }
+dialog input, dialog textarea {
+    font-size: 17px; color: var(--tinta); background: var(--fondo);
+    border: 1px solid var(--borde); border-radius: 10px; padding: 7px 12px; resize: vertical;
+}
+dialog input:focus, dialog textarea:focus { outline: none; border-color: var(--rojo); }
+dialog .row { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+dialog .row .left { margin-right: auto; }
+
+/* ---------- Avisos y soltar enlaces ---------- */
+.toast {
+    position: fixed; left: 50%; bottom: 20px; z-index: 30;
+    transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+    display: flex; align-items: center; gap: 12px; max-width: min(92vw, 520px);
+    background: var(--tinta); color: var(--fondo); padding: 10px 16px; border-radius: 12px; font-size: 16px;
+    transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.toast button { border: 0; background: transparent; color: var(--rojo); font-weight: 700; cursor: pointer; padding: 0; filter: brightness(1.3); }
+.veil {
+    position: fixed; inset: 0; z-index: 25; display: grid; place-items: center;
+    pointer-events: none; opacity: 0; transition: opacity .15s;
+    background: rgba(178, 58, 43, .14); border: 3px dashed var(--rojo);
+}
+.veil.show { opacity: 1; }
+.veil span { background: var(--papel); padding: 12px 20px; border-radius: 14px; font-weight: 600; }
+
+:focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; }
+
+@media (max-width: 560px) {
+    .card { grid-template-columns: 100px minmax(0, 1fr); }
+    .card .thumb { min-height: 100px; }
+    .card .thumb .noimg::before { width: 54px; height: 54px; }
+    .card .thumb .noimg img { width: 26px; height: 26px; }
+    .card .body { padding: 10px 12px 6px; gap: 4px; }
+    .card a.title { font-size: 18px; }
+    .card .desc { -webkit-line-clamp: 2; font-size: 15px; }
+    .adder input { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .card, .card.flash, .card.loading .thumb { animation: none; transition: none; }
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mundodisco</title>
+    <meta name="description" content="Páginas sobre el Mundodisco de Terry Pratchett: guía de lectura, mapa de lugares y más.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/portada.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="../index.html">← jd26</a>
+    </nav>
+
+    <header class="cabecera portada-cabecera">
+        <svg class="tortuga" viewBox="0 0 200 120" aria-hidden="true">
+            <!-- Gran A'Tuin con los cuatro elefantes y el disco -->
+            <ellipse cx="100" cy="30" rx="80" ry="10" class="t-disco"/>
+            <rect x="52" y="36" width="12" height="22" rx="4" class="t-elefante"/>
+            <rect x="78" y="38" width="12" height="20" rx="4" class="t-elefante"/>
+            <rect x="110" y="38" width="12" height="20" rx="4" class="t-elefante"/>
+            <rect x="136" y="36" width="12" height="22" rx="4" class="t-elefante"/>
+            <path d="M40 78 Q100 40 160 78 Z" class="t-caparazon"/>
+            <path d="M40 78 Q100 92 160 78" class="t-vientre"/>
+            <ellipse cx="172" cy="80" rx="12" ry="8" class="t-caparazon"/>
+            <path d="M58 82 l-10 14 M86 86 l-4 14 M114 86 l4 14 M142 82 l10 14" class="t-patas"/>
+        </svg>
+        <h1>El <span>Mundodisco</span></h1>
+        <p class="subtitulo">Páginas para leer y recorrer el mundo de Terry Pratchett.<br>«Un hombre no está muerto mientras su nombre siga siendo pronunciado.»</p>
+    </header>
+
+    <!--
+        ===== CÓMO AÑADIR UNA PÁGINA =====
+        1. Crea la página en esta carpeta enlazando css/mundodisco.css (estilos comunes)
+           y, si hace falta, una hoja propia en css/.
+        2. Pon en su barra superior: <a class="volver" href="index.html">← Mundodisco</a>
+        3. Copia aquí un <li class="pagina"> completo y cambia enlace, imagen, título, texto y etiquetas.
+    -->
+    <main class="portada">
+        <ul class="paginas">
+            <li class="pagina">
+                <a href="guia-de-lectura-de-mundodisco.html">
+                    <span class="vista" style="background-image: url('images/Discworld_Reading_Order_Guide_3.0.jpg'); background-position: 50% 62%;"></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #E3A21A" aria-hidden="true"></span>
+                        <h2>Guía de lectura</h2>
+                        <p>El orden de lectura de las sagas como un mapa interactivo, con un resumen de cada uno de los 55 libros y la posibilidad de marcar los que ya has leído.</p>
+                        <p class="etiquetas"><span>libros</span><span>sagas</span><span>resúmenes</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="quien-es-quien.html">
+                    <span class="vista vista-quien" aria-hidden="true"><i style="--c:#C9962A"></i><i style="--c:#5B5F7E"></i><i style="--c:#2F6F8F"></i><i style="--c:#3F7D3A"></i><i style="--c:#B565A7"></i><i style="--c:#A0522D"></i></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #5B5F7E" aria-hidden="true"></span>
+                        <h2>Quién es quién</h2>
+                        <p>Los personajes por orden de importancia, en toda la serie o libro a libro, con un retrato y una breve biografía de cada uno.</p>
+                        <p class="etiquetas"><span>personajes</span><span>biografías</span><span>retratos</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="mapa-lugares-de-mundodisco.html">
+                    <span class="vista" style="background-image: url('images/Mapa_DiscWorld.png'); background-position: 50% 62%;"></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #3BB6B0" aria-hidden="true"></span>
+                        <h2>Lugares</h2>
+                        <p>Mapa del disco con ciudades, reinos y parajes: qué es cada uno, dónde queda respecto al Eje y en qué libros aparece.</p>
+                        <p class="etiquetas"><span>mapa</span><span>geografía</span><span>orientación</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="ankh-morpork.html">
+                    <span class="vista" style="background-image: url('images/AM_Map_Barrios_web.jpg'); background-position: 50% 45%;"></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #B07F1A" aria-hidden="true"></span>
+                        <h2>Ankh-Morpork</h2>
+                        <p>Plano de la gran ciudad del disco: sus barrios, los gremios, el Palacio del Patricio, la Universidad Invisible y los lugares donde ocurren las novelas.</p>
+                        <p class="etiquetas"><span>ciudad</span><span>gremios</span><span>barrios</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="timeline-de-mundodisco.html">
+                    <span class="vista vista-tiempo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #2F6F8F" aria-hidden="true"></span>
+                        <h2>Cronología</h2>
+                        <p>Los libros año a año, el pasado del disco, sus inventos (del cine al ferrocarril) y cómo cambian los personajes de un libro a otro.</p>
+                        <p class="etiquetas"><span>timeline</span><span>historia</span><span>personajes</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="glosario.html">
+                    <span class="vista vista-glosario" aria-hidden="true"><i>O</i><i>Ñ</i><i>Q</i></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #6A4C93" aria-hidden="true"></span>
+                        <h2>Glosario</h2>
+                        <p>Las palabras del Mundodisco explicadas: octarina, cabezología, clacks, Espacio-B, narrativium… con los libros donde aparecen.</p>
+                        <p class="etiquetas"><span>glosario</span><span>términos</span><span>referencia</span></p>
+                    </span>
+                </a>
+            </li>
+            <li class="pagina">
+                <a href="enlaces-de-mundodisco.html">
+                    <span class="vista vista-enlaces" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="cuerpo">
+                        <span class="sello-mini" style="--sello: #B23A2B" aria-hidden="true"></span>
+                        <h2>Mundodisco en Internet</h2>
+                        <p>Tu colección de enlaces sobre el Mundodisco: wikis, arte, tiendas y homenajes, como tarjetas con imagen y agrupados por categoría.</p>
+                        <p class="etiquetas"><span>enlaces</span><span>recursos</span><span>colección</span></p>
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <aside class="recurso">
+            <h2>Todo lo que sabemos de Mundodisco <a href="sabemos-de-mundodisco.html"> →</a></h2>
+            
+        </aside>
+    </main>
+
+    <footer class="pie">
+        <p>En memoria de Terry Pratchett (1948–2015). GNU Terry Pratchett.</p>
+    </footer>
+</body>
+</html>

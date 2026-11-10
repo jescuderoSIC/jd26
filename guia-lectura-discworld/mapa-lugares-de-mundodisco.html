@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lugares del Mundodisco</title>
+    <meta name="description" content="Mapa interactivo de los lugares del Mundodisco: qué es cada uno y en qué libros aparece.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/mapa.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Lugares del <span>Mundodisco</span></h1>
+        <p class="subtitulo">Un mundo plano sobre cuatro elefantes sobre una tortuga. Pulsa un lugar para saber qué es y dónde aparece.</p>
+    </header>
+
+    <section class="herramientas" aria-label="Filtros">
+        <input type="search" id="buscador" placeholder="Buscar lugar…" aria-label="Buscar lugar">
+        <div class="filtro" role="group" aria-label="Filtrar por zona" id="filtro-zonas"></div>
+        <div class="filtro leyenda" role="group" aria-label="Filtrar por tipo de lugar" id="filtro-tipos"></div>
+    </section>
+
+    <main class="disposicion">
+        <div class="visor-marco">
+            <div class="visor" id="visor" aria-label="Mapa del Mundodisco. Arrastra para moverte y usa la rueda o pellizca para acercar.">
+                <div class="plano" id="plano">
+                    <img src="images/Mapa_DiscWorld.png" alt="Mapa del Mundodisco visto desde arriba, con el Eje en el centro" width="1000" height="978" draggable="false">
+                    <svg class="capa-eje" id="capa-eje" viewBox="0 0 1000 978" aria-hidden="true">
+                        <circle id="eje-marca" r="9"/>
+                        <line id="linea-eje"/>
+                        <line id="linea-borde"/>
+                    </svg>
+                    <div class="marcadores" id="marcadores"></div>
+                </div>
+            </div>
+            <div class="controles-zoom" role="group" aria-label="Zoom">
+                <button type="button" id="acercar" aria-label="Acercar">+</button>
+                <button type="button" id="alejar" aria-label="Alejar">−</button>
+                <button type="button" id="encuadrar" aria-label="Ver el disco entero">⤢</button>
+            </div>
+            <div class="opciones-mapa">
+                <label><input type="checkbox" id="ver-nombres"> Mostrar nombres</label>
+                <span class="pista-mapa">Arrastra para moverte · rueda o pellizco para acercar</span>
+            </div>
+        </div>
+
+        <aside class="ficha" id="ficha" aria-live="polite" tabindex="-1">
+            <div class="ficha-vacia" id="ficha-vacia">
+                <p class="sello-grande" aria-hidden="true">✦</p>
+                <p>Elige un lugar del mapa o de la lista para ver qué es y en qué libros aparece.</p>
+                <p class="pista">El recuadro rojo del mapa señala la zona donde ocurre casi todo: Lancre, las Llanuras de Sto y Ankh-Morpork.</p>
+            </div>
+            <article id="ficha-lugar" hidden>
+                <button type="button" class="cerrar" id="cerrar" aria-label="Cerrar ficha">×</button>
+                <p class="ficha-saga" id="ficha-zona"></p>
+                <h2 id="ficha-nombre"></h2>
+                <p class="ficha-es" id="ficha-es"></p>
+                <p class="ficha-datos">
+                    <span class="insignia" id="ficha-tipo"></span>
+                    <span id="ficha-posicion"></span>
+                </p>
+                <p class="ficha-resumen" id="ficha-texto"></p>
+                <p class="aviso-aprox" id="ficha-aprox" hidden>Posición aproximada: el mapa no lo marca.</p>
+                <div class="ficha-relacion" id="ficha-libros">
+                    <h3>Aparece en</h3>
+                    <ul id="lista-libros"></ul>
+                </div>
+            </article>
+        </aside>
+    </main>
+
+    <section class="entender" aria-labelledby="titulo-entender">
+        <h2 id="titulo-entender">Cómo orientarse en el Mundodisco</h2>
+        <div class="entender-rejilla">
+            <figure class="diagrama">
+                <svg viewBox="0 0 320 320" role="img" aria-labelledby="diag-titulo">
+                    <title id="diag-titulo">Diagrama de direcciones: hacia el Eje, hacia el Borde, en el sentido del giro y en contra</title>
+                    <defs>
+                        <marker id="punta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="punta"/>
+                        </marker>
+                    </defs>
+                    <circle cx="160" cy="160" r="140" class="disco"/>
+                    <circle cx="160" cy="160" r="100" class="anillo-d"/>
+                    <circle cx="160" cy="160" r="60" class="anillo-d"/>
+                    <circle cx="160" cy="160" r="140" class="borde-d"/>
+                    <polygon points="160,144 170,170 150,170" class="montana"/>
+                    <!-- Hacia el Eje y hacia el Borde -->
+                    <line x1="160" y1="70" x2="160" y2="130" class="flecha-d" marker-end="url(#punta)"/>
+                    <line x1="160" y1="190" x2="160" y2="268" class="flecha-d" marker-end="url(#punta)"/>
+                    <!-- Giro -->
+                    <path d="M 255 105 A 110 110 0 0 1 265 205" class="flecha-giro" marker-end="url(#punta)"/>
+                    <path d="M 65 205 A 110 110 0 0 1 55 105" class="flecha-contra" marker-end="url(#punta)"/>
+                    <text x="160" y="62" text-anchor="middle">hacia el Eje</text>
+                    <text x="160" y="288" text-anchor="middle">hacia el Borde</text>
+                    <text x="286" y="160" text-anchor="middle" transform="rotate(90 286 160)">en el sentido del giro</text>
+                    <text x="34" y="160" text-anchor="middle" transform="rotate(-90 34 160)">en contra del giro</text>
+                    <text x="160" y="186" text-anchor="middle" class="pequeno">Cori Celesti</text>
+                </svg>
+                <figcaption>En un disco no sirven el norte ni el sur: las direcciones se dan respecto al centro y al giro.</figcaption>
+            </figure>
+            <div class="tarjetas">
+                <article class="tarjeta">
+                    <h3>Un mundo plano</h3>
+                    <p>El disco descansa sobre los lomos de cuatro elefantes gigantes (Berilia, Tubul, Gran T'Phon y Jerakeen), que a su vez se apoyan en el caparazón de <strong>Gran A'Tuin</strong>, la tortuga estelar que nada lentamente por el espacio. Nadie sabe adónde va.</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>Las cuatro direcciones</h3>
+                    <p>Se habla de ir <strong>hacia el Eje</strong> (<em>hubwards</em>) o <strong>hacia el Borde</strong> (<em>rimwards</em>), y en el <strong>sentido del giro</strong> (<em>turnwise</em>) o en contra (<em>widdershins</em>). Los círculos del mapa marcan la distancia al Eje.</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>El Eje y el clima</h3>
+                    <p>En el centro se alza <strong>Cori Celesti</strong>, hogar de los dioses. Cerca del Eje el campo mágico es más intenso y hace frío; hacia el Borde el clima es más cálido, porque el pequeño sol gira alrededor del disco y calienta más los bordes.</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>El Borde</h3>
+                    <p>El océano termina en la <strong>Cascada del Borde</strong>, por la que el agua cae eternamente al vacío, acompañada de un arcoíris permanente de ocho colores. La isla de <strong>Krull</strong> vive literalmente asomada a ella.</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>El Mar Circular</h3>
+                    <p>Casi toda la acción ocurre en torno a este mar interior: en una orilla, las Llanuras de Sto y Ankh-Morpork; en la otra, Klatch y los reinos antiguos (Omnia, Ephebe, Djelibeybi, Tsort).</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>El Continente Contrapeso</h3>
+                    <p>Al otro lado del disco está el Imperio Ágata. Tiene tanto oro que hace de contrapeso de las tierras centrales y mantiene el disco equilibrado sobre los elefantes.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="listado" aria-labelledby="titulo-listado">
+        <h2 id="titulo-listado">Lugares por zonas</h2>
+        <div class="sagas" id="listado"></div>
+    </section>
+
+    <footer class="pie">
+        <p>Mapa base: <a href="images/Mapa_DiscWorld.png">Mapa_DiscWorld.png</a>, proyección polar centrada en el Eje.
+        Descripciones propias. Los libros enlazan con la <a href="guia-de-lectura-de-mundodisco.html">guía de lectura</a>.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/lugares.js"></script>
+    <script src="js/mapa.js"></script>
+</body>
+</html>

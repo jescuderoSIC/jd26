@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cronología del Mundodisco</title>
+    <meta name="description" content="Línea temporal del Mundodisco: publicación de los libros, el pasado del disco, sus inventos y la vida de sus personajes.">
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/mundodisco.css">
+    <link rel="stylesheet" href="css/timeline.css">
+</head>
+<body>
+    <nav class="barra">
+        <a class="volver" href="index.html">← Mundodisco</a>
+    </nav>
+
+    <header class="cabecera">
+        <h1>Cronología del <span>Mundodisco</span></h1>
+        <p class="subtitulo">Cuarenta y una novelas en treinta y dos años, y un mundo que cambia con ellas.</p>
+    </header>
+
+    <section class="aviso-tiempo">
+        <h2>¿Hay una cronología en el Mundodisco?</h2>
+        <p>Sí y no. Pratchett nunca fijó fechas: en el disco no se cuentan los años como en nuestro mundo y los Monjes de la Historia se encargan de remendar el tiempo cuando se rompe. Pero el mundo <strong>sí avanza</strong>: los personajes envejecen, se casan y tienen hijos, y Ankh-Morpork pasa de la magia a los periódicos, el telégrafo y el ferrocarril. Por eso, a grandes rasgos, <strong>el orden de publicación es también el orden de los acontecimientos</strong>, salvo algunos viajes al pasado.</p>
+    </section>
+
+    <nav class="indice" aria-label="Secciones">
+        <a href="#publicacion">Publicación</a>
+        <a href="#pasado">El pasado del disco</a>
+        <a href="#inventos">El mundo se moderniza</a>
+        <a href="#personajes">Vidas de los personajes</a>
+    </nav>
+
+    <!-- ===== 1. Publicación ===== -->
+    <section class="bloque" id="publicacion" aria-labelledby="t-publicacion">
+        <h2 id="t-publicacion">Los libros, año a año</h2>
+        <p class="entradilla">Pulsa un libro para leer su resumen. Los que hayas marcado como leídos en la guía llevan ✓.</p>
+        <div class="herramientas-tl">
+            <div class="filtro" role="group" aria-label="Filtrar por saga" id="filtro-sagas"></div>
+            <label class="casilla"><input type="checkbox" id="solo-novelas"> Solo novelas</label>
+            <label class="casilla"><input type="checkbox" id="ver-autor" checked> Vida del autor</label>
+        </div>
+        <ol class="tl" id="tl"></ol>
+    </section>
+
+    <!-- ===== 2. El pasado ===== -->
+    <section class="bloque" id="pasado" aria-labelledby="t-pasado">
+        <h2 id="t-pasado">El pasado del disco</h2>
+        <p class="entradilla">Lo que cuentan los libros sobre épocas anteriores, de lo más remoto al presente de las novelas.</p>
+        <ol class="profundidad" id="lista-pasado"></ol>
+    </section>
+
+    <!-- ===== 3. Inventos ===== -->
+    <section class="bloque" id="inventos" aria-labelledby="t-inventos">
+        <h2 id="t-inventos">El mundo se moderniza</h2>
+        <p class="entradilla">El Mundodisco vive su propia revolución industrial. Cada sello es un invento y el libro donde aparece.</p>
+        <div class="via" id="via-inventos"></div>
+    </section>
+
+    <!-- ===== 4. Personajes ===== -->
+    <section class="bloque" id="personajes" aria-labelledby="t-personajes">
+        <h2 id="t-personajes">Vidas de los personajes</h2>
+        <p class="entradilla">Cómo cambian los protagonistas de una novela a la siguiente. Sin destripar finales.</p>
+        <div class="carriles" id="carriles"></div>
+    </section>
+
+    <footer class="pie">
+        <p>Fechas de publicación de la edición original en inglés. La cronología interna es aproximada: el propio autor la dejó así.
+        Más detalles de cada libro en la <a href="guia-de-lectura-de-mundodisco.html">guía de lectura</a>.</p>
+    </footer>
+
+    <script src="js/libros.js"></script>
+    <script src="js/lugares.js"></script>
+    <script src="js/historia.js"></script>
+    <script src="js/timeline.js"></script>
+</body>
+</html>
